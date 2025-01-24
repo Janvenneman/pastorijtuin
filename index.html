@@ -3,180 +3,210 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pastorijtuin Reservering</title>
+  <title>Pastorijtuin Reserveringssysteem</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f9fdf9;
+      background-color: #f4fdf4;
       margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
+      padding: 20px;
     }
+
     header {
-      margin: 20px 0;
       text-align: center;
+      margin-bottom: 20px;
     }
+
     header img {
-      max-width: 150px;
+      max-width: 200px;
       margin-bottom: 10px;
     }
-    header h1 {
-      font-size: 1.8rem;
-      color: #4a4a4a;
-    }
-    .info-text {
-      color: #7a7a7a;
+
+    header p {
       font-style: italic;
-      margin-bottom: 30px;
-      text-align: center;
-      max-width: 600px;
+      color: #6d6d6d;
+      font-size: 1rem;
     }
+
     .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      max-width: 600px;
-      background-color: #fff;
-      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
       border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-    .form-field {
+
+    .form-group {
       display: flex;
       align-items: center;
       margin-bottom: 20px;
-      width: 100%;
     }
-    .form-field label {
+
+    .form-group label {
       width: 150px;
-      text-align: right;
-      margin-right: 15px;
       font-weight: bold;
     }
-    .form-field input, .form-field textarea {
+
+    .form-group input, .form-group textarea {
       flex: 1;
       padding: 8px;
       border: 1px solid #ccc;
       border-radius: 5px;
     }
-    .form-field textarea {
+
+    .form-group textarea {
       resize: vertical;
     }
-    .centered {
+
+    .submit-container {
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      width: 100%;
     }
-    .submit-button {
+
+    .submit-container .submit-button {
       padding: 10px 20px;
       background-color: #4caf50;
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      margin-left: auto;
     }
-    .submit-button:disabled {
+
+    .submit-container .submit-button:disabled {
       background-color: #ccc;
       cursor: not-allowed;
     }
+
     .status-message {
-      margin-top: 20px;
       text-align: center;
       font-size: 1.2rem;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
   <header>
     <img src="logo.png" alt="Logo Pastorijtuin">
-    <h1>Pastorijtuin Reserveringssysteem</h1>
-    <p class="info-text">
-      Welkom op het reserveringssysteem van de Pastorijtuin. Vul de onderstaande velden in om een reservering te maken voor een tijdslot.
-    </p>
+    <p>Welkom op de website van de Pastorijtuin. Deze website is uitsluitend bedoeld voor de bewoners en eigenaars van onze appartementen voor specifieke toepassingen.</p>
   </header>
 
   <div class="container">
-    <div class="form-field">
-      <label for="blok">Blok</label>
-      <input type="text" id="blok" placeholder="Bijv. BLOK 3" required>
+    <div id="blok-selection">
+      <p>Kies een blok om de beschikbare tijdslots te bekijken:</p>
+      <button class="blok-button" data-blok="BLOK 3">BLOK 3</button>
+      <button class="blok-button" data-blok="BLOK 3A">BLOK 3A</button>
+      <button class="blok-button" data-blok="BLOK 3B">BLOK 3B</button>
+      <button class="blok-button" data-blok="BLOK 3C">BLOK 3C</button>
     </div>
-    <div class="form-field">
-      <label for="slot">Tijdslot</label>
-      <input type="text" id="slot" placeholder="Bijv. 8.15u" required>
+
+    <div id="time-selection" style="display: none;">
+      <h3>Kies een tijdslot:</h3>
+      <div id="time-slots"></div>
+      <button id="back-to-blok">Terug</button>
     </div>
-    <div class="form-field">
-      <label for="name">Naam</label>
-      <input type="text" id="name" placeholder="Uw naam" required>
+
+    <div id="reservation-form" style="display: none;">
+      <h3>Reserveringsdetails</h3>
+      <form id="reservation-details">
+        <div class="form-group">
+          <label for="name">Naam:</label>
+          <input type="text" id="name" placeholder="Uw naam" required>
+        </div>
+        <div class="form-group">
+          <label for="apartment">Appartement:</label>
+          <input type="text" id="apartment" placeholder="Uw adres" required>
+        </div>
+        <div class="form-group">
+          <label for="contact">Contact:</label>
+          <input type="text" id="contact" placeholder="GSM of e-mail" required>
+        </div>
+        <div class="form-group">
+          <label for="remarks">Opmerkingen:</label>
+          <textarea id="remarks" placeholder="Eventuele opmerkingen" rows="4"></textarea>
+        </div>
+        <div class="submit-container">
+          <button type="submit" class="submit-button">Verzenden</button>
+        </div>
+      </form>
     </div>
-    <div class="form-field">
-      <label for="apartment">Adres</label>
-      <input type="text" id="apartment" placeholder="Bijv. Appartement BLOK 3" required>
-    </div>
-    <div class="form-field">
-      <label for="contact">GSM of e-mail</label>
-      <input type="text" id="contact" placeholder="Bijv. 0491234567 of email@example.com" required>
-    </div>
-    <div class="form-field centered">
-      <label for="remarks">Opmerkingen</label>
-      <textarea id="remarks" rows="4" placeholder="Eventuele opmerkingen"></textarea>
-    </div>
-    <div class="centered">
-      <button id="submit-button" class="submit-button" disabled>Verzenden</button>
-    </div>
+    <div class="status-message" id="status-message"></div>
   </div>
 
-  <div class="status-message" id="status-message"></div>
-
   <script>
-    // Enable button if all fields are filled
-    const fields = document.querySelectorAll("#blok, #slot, #name, #apartment, #contact");
-    const submitButton = document.getElementById("submit-button");
+    const blokButtons = document.querySelectorAll(".blok-button");
+    const blokSelection = document.getElementById("blok-selection");
+    const timeSelection = document.getElementById("time-selection");
+    const reservationForm = document.getElementById("reservation-form");
+    const timeSlotsContainer = document.getElementById("time-slots");
+    const backToBlok = document.getElementById("back-to-blok");
     const statusMessage = document.getElementById("status-message");
 
-    fields.forEach(field => {
-      field.addEventListener("input", () => {
-        const allFilled = Array.from(fields).every(input => input.value.trim() !== "");
-        submitButton.disabled = !allFilled;
+    let selectedBlok = null;
+
+    blokButtons.forEach(button => {
+      button.addEventListener("click", async () => {
+        selectedBlok = button.dataset.blok;
+        blokSelection.style.display = "none";
+        timeSelection.style.display = "block";
+
+        // Fetch time slots for the selected block
+        const response = await fetch(`/.netlify/functions/reserve?mode=get`);
+        const blokData = await response.json();
+        const blok = blokData[selectedBlok];
+
+        timeSlotsContainer.innerHTML = blok.timeslots.map((slot, index) => {
+          const isSelected = blok.selected[index];
+          return `<button class="slot-button" data-index="${index}" ${
+            isSelected ? "disabled" : ""
+          }>${slot}</button>`;
+        }).join("");
       });
     });
 
-    submitButton.addEventListener("click", async () => {
-      // Verzamel gegevens
-      const data = {
-        blok: document.getElementById("blok").value.trim(),
-        slot: document.getElementById("slot").value.trim(),
-        name: document.getElementById("name").value.trim(),
-        apartment: document.getElementById("apartment").value.trim(),
-        contact: document.getElementById("contact").value.trim(),
-        remarks: document.getElementById("remarks").value.trim()
+    timeSlotsContainer.addEventListener("click", event => {
+      if (event.target.classList.contains("slot-button")) {
+        const slotIndex = event.target.dataset.index;
+        timeSelection.style.display = "none";
+        reservationForm.style.display = "block";
+
+        // Save selected slot index to submit with reservation
+        reservationForm.dataset.slotIndex = slotIndex;
+      }
+    });
+
+    backToBlok.addEventListener("click", () => {
+      timeSelection.style.display = "none";
+      blokSelection.style.display = "block";
+    });
+
+    reservationForm.addEventListener("submit", async event => {
+      event.preventDefault();
+
+      const formData = {
+        blok: selectedBlok,
+        index: reservationForm.dataset.slotIndex,
+        name: document.getElementById("name").value,
+        apartment: document.getElementById("apartment").value,
+        contact: document.getElementById("contact").value,
+        remarks: document.getElementById("remarks").value,
       };
 
-      // Stuur POST-verzoek naar de Netlify Function
-      try {
-        const response = await fetch("/.netlify/functions/reserve", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
+      const response = await fetch("/.netlify/functions/reserve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-        if (response.status === 200) {
-          statusMessage.textContent = "Reservering succesvol! Uw slot is gereserveerd.";
-          statusMessage.style.color = "green";
-        } else if (response.status === 409) {
-          statusMessage.textContent = "Het tijdslot is al gereserveerd. Kies een ander slot.";
-          statusMessage.style.color = "red";
-        } else {
-          statusMessage.textContent = "Er is een fout opgetreden. Probeer het opnieuw.";
-          statusMessage.style.color = "red";
-        }
-      } catch (error) {
-        console.error(error);
-        statusMessage.textContent = "Er is een fout opgetreden. Probeer het opnieuw.";
+      if (response.status === 200) {
+        statusMessage.textContent = "Reservering succesvol!";
+        statusMessage.style.color = "green";
+      } else if (response.status === 409) {
+        statusMessage.textContent = "Het tijdslot is al gereserveerd.";
+        statusMessage.style.color = "red";
+      } else {
+        statusMessage.textContent = "Er is een fout opgetreden.";
         statusMessage.style.color = "red";
       }
     });
