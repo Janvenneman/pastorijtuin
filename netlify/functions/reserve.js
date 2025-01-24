@@ -8,7 +8,7 @@ exports.handler = async (event, context) => {
 
   // Vervang "Reservatie" door jouw collectie-naam
   // Vervang "420970567742521552" door jouw Fauna-document ID
-  const docRef = q.Ref(q.Collection("Reservatie"), "420970567742521552");
+  const docRef = q.Ref(q.Collection("Reservatie"), "420993793829896400");
 
   if (event.httpMethod === "GET") {
     const mode = event.queryStringParameters.mode || "";
