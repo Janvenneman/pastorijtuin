@@ -13,7 +13,7 @@ exports.handler = async (event, context) => {
   // 2) Verwijs naar jouw document in Fauna:
   //    - Collection heet "Reservatie"
   //    - Document ID hier op "slots" gezet (pas dit aan naar jouw werkelijke ID)
-  const docRef = q.Ref(q.Collection("Reservatie"), "slots");
+  const docRef = q.Ref(q.Collection("Reservatie"), "420993793829896400");
 
   // 3) Log het event.httpMethod en evt. queryparams voor debugging
   console.log("[RESERVE] HTTP method:", event.httpMethod);
