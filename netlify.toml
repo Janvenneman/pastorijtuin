@@ -1,0 +1,5 @@
+[build]
+  # Geef aan dat Netlify je root (.) publiceert
+  publish = "."
+  # Hier staan onze serverless functions
+  functions = "netlify/functions"
