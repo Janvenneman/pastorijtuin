@@ -2,92 +2,132 @@
 
 const { createClient } = require("@supabase/supabase-js");
 
-// Netlify handler
 exports.handler = async (event, context) => {
   console.log("[SUPABASE RESERVE] Method:", event.httpMethod);
+  console.log("[SUPABASE RESERVE] Query params:", event.queryStringParameters);
 
-  // 1) Maak de Supabase client aan met server credentials
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
+  // Maak de Supabase client met de service role key (server-side)
+  const supabaseUrl = process.env.SUPABASE_DATABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  // 2) Routes
+  // GET ?mode=get => haal alle slots en bouw blokData structuur
   if (event.httpMethod === "GET") {
     const mode = event.queryStringParameters.mode || "";
     if (mode === "get") {
-      // Haal alle slots op
       try {
-        console.log("[GET] Fetching all time_slots...");
-        let { data, error } = await supabase
+        // Haal alle tijdslots
+        console.log("[GET] Fetching all rows from 'time_slots'...");
+        const { data, error } = await supabase
           .from("time_slots")
-          .select("*");
+          .select("*")
+          .order("blok", { ascending: true })
+          .order("slot_index", { ascending: true });
 
         if (error) {
           console.error("[GET] Supabase error:", error);
-          return { statusCode: 500, body: "Supabase get error: " + error.message };
+          return { statusCode: 500, body: "Supabase error: " + error.message };
         }
 
-        // data is een array van rows: [
-        //   { id, blok, date_str, slot, is_selected },
-        //   ...
-        // ]
-        console.log("[GET] Received rows:", data.length);
+        // Bouw de blokData structuur
+        let blokData = {};
+        for (let row of data) {
+          const blok = row.blok;
+          if (!blokData[blok]) {
+            blokData[blok] = {
+              date: row.date_str || "",
+              timeslots: [],
+              selected: []
+            };
+          }
+          blokData[blok].timeslots.push(row.slot_label);
+          blokData[blok].selected.push(row.is_selected);
+        }
+
+        console.log("[GET] Constructed blokData structure:", blokData);
+
         return {
           statusCode: 200,
-          body: JSON.stringify(data)
+          body: JSON.stringify(blokData)
         };
       } catch (err) {
         console.error("[GET] Unexpected error:", err);
-        return { statusCode: 500, body: "Unexpected get error: " + err.message };
+        return { statusCode: 500, body: "Unexpected GET error: " + err.message };
       }
     }
     return { statusCode: 400, body: "Unknown GET mode" };
   }
 
+  // POST => reserveer een tijdslot met concurrency-check
   if (event.httpMethod === "POST") {
     try {
-      // Client stuurt body { blok, slot } of { blok, index }, hoe je wilt
       const body = JSON.parse(event.body);
-      console.log("[POST] Body:", body);
+      console.log("[POST] Received body:", body);
 
       const blok = body.blok;
-      const slot = body.slot; 
-      // OF als je met "index" werkt, moet je iets anders doen. 
-      // Supabase is row-based, dus we zoeken row via (blok, slot)...
+      const index = body.index; // 0, 1, 2...
 
-      // 3) Concurrency-check via "update... where is_selected = false"
-      // We updaten EXACT 1 row matching (blok, slot) en is_selected=false
-      const { data, error, count } = await supabase
+      // Update alleen als is_selected=false
+      const { data, error } = await supabase
         .from("time_slots")
         .update({ is_selected: true })
         .eq("blok", blok)
-        .eq("slot", slot)
-        .eq("is_selected", false)     // concurrency
-        .select("*", { count: "exact" });
+        .eq("slot_index", index)
+        .eq("is_selected", false) // Concurrency-check
+        .select("*");
 
       if (error) {
         console.error("[POST] Supabase update error:", error);
-        return { statusCode: 500, body: "Supabase update error: " + error.message };
+        return { statusCode: 500, body: "Update error: " + error.message };
       }
 
       if (data.length === 0) {
-        // Betekent dat er geen row is geüpdatet => slot was al true of bestaat niet
+        // Geen rijen geüpdate => conflict
         console.warn("[POST] Conflict, slot already taken or not found");
         return { statusCode: 409, body: "Slot is already taken" };
       }
 
-      // Succes
-      console.log("[POST] Update success. Updated row(s):", data.length);
+      // Succes: data[0] is de geüpdatete row
+      console.log("[POST] Updated row:", data[0]);
+
+      // Refresh alle data om nieuwe blokData terug te sturen
+      const refresh = await supabase
+        .from("time_slots")
+        .select("*")
+        .order("blok", { ascending: true })
+        .order("slot_index", { ascending: true });
+
+      if (refresh.error) {
+        console.error("[POST] Refresh error:", refresh.error);
+        return { statusCode: 500, body: "Refresh error: " + refresh.error.message };
+      }
+
+      let blokData = {};
+      for (let row of refresh.data) {
+        const blok = row.blok;
+        if (!blokData[blok]) {
+          blokData[blok] = {
+            date: row.date_str || "",
+            timeslots: [],
+            selected: []
+          };
+        }
+        blokData[blok].timeslots.push(row.slot_label);
+        blokData[blok].selected.push(row.is_selected);
+      }
+
+      console.log("[POST] Updated blokData after reservation");
       return {
         statusCode: 200,
-        body: JSON.stringify({ updated: data[0] })
+        body: JSON.stringify(blokData)
       };
 
     } catch (err) {
       console.error("[POST] Unexpected error:", err);
-      return { statusCode: 500, body: "Unexpected post error: " + err.message };
+      return { statusCode: 500, body: "Unexpected POST error: " + err.message };
     }
   }
 
+  // Andere HTTP-methods niet toegestaan
   return { statusCode: 405, body: "Method Not Allowed" };
 };
