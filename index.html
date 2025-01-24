@@ -1,505 +1,185 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <title>De Pastorijtuin - Reservering</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pastorijtuin Reservering</title>
   <style>
-    /* Algemeen */
     body {
+      font-family: Arial, sans-serif;
+      background-color: #f9fdf9;
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
-      background-color: #ccffcc; /* lichtgroen */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    header {
+      margin: 20px 0;
       text-align: center;
     }
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    /* Logo groter */
-    .logo {
-      display: block;
-      margin: 20px auto 10px auto;
-      max-width: 500px; /* Grotere logo */
-      width: 100%;
-      height: auto;
-    }
-
-    /* Infotekst: vet, grijs, ander lettertype */
-    .infotekst {
-      font-family: Georgia, serif;
-      font-weight: bold;
-      color: #555;
-      font-size: 1.1em;
-      margin-bottom: 20px;
-    }
-
-    /* Hoofdstuk / tekst */
-    .hoofdstuk {
-      color: #000;
-      margin: 20px 0;
-      text-align: left;
-      line-height: 1.4;
-    }
-
-    /* Tabel e.d. (optioneel, pas aan naar wens) */
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin: 20px 0;
-    }
-    th, td {
-      border: 1px solid #000;
-      padding: 8px;
-      text-align: left;
-    }
-    th {
-      background-color: #ddd;
-    }
-
-    /* Checkbox / blokknoppen */
-    .checkbox-section {
-      margin: 20px 0;
-    }
-    .blok-buttons {
-      margin: 20px 0;
-    }
-    .blok-buttons button {
-      margin: 5px;
-      padding: 10px 20px;
-      font-size: 1em;
-      cursor: pointer;
-    }
-    .blok-buttons button:disabled {
-      background-color: #999;
-      cursor: not-allowed;
-    }
-
-    /* Tijdslot-sectie */
-    .tijdslot-sectie,
-    .formulier-sectie,
-    .final-message {
-      margin: 20px 0;
-      padding: 15px;
-      border: 1px solid #666;
-      background-color: #eee;
-      display: none; /* verborgen tot we ze tonen via JS */
-      text-align: center;
-    }
-
-    /* Tijdslot-kleurcodes */
-    .tijdslot-button {
-      margin: 5px;
-      padding: 8px 12px;
-      font-size: 1em;
-      cursor: pointer;
-      color: #fff;
-    }
-    .tijdslot-button.free {
-      background-color: green;
-    }
-    .tijdslot-button.busy {
-      background-color: red;
-    }
-    #geenKeuzeBtn {
-      background-color: orange;
-      color: #fff;
-    }
-
-    /* Formulier */
-    .formulier-label {
-      display: block;
-      margin: 10px 0 5px;
-      font-weight: bold;
-      text-align: left;
-    }
-    .formulier-input {
-      width: 80%;
-      max-width: 400px;
-      padding: 8px;
+    header img {
+      max-width: 150px;
       margin-bottom: 10px;
     }
-    .btn-verzenden {
-      background-color: #000;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      cursor: pointer;
-      font-size: 1em;
-      margin-top: 10px;
+    header h1 {
+      font-size: 1.8rem;
+      color: #4a4a4a;
     }
-    .btn-verzenden:disabled {
-      background-color: #999;
+    .info-text {
+      color: #7a7a7a;
+      font-style: italic;
+      margin-bottom: 30px;
+      text-align: center;
+      max-width: 600px;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 600px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .form-field {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      width: 100%;
+    }
+    .form-field label {
+      width: 150px;
+      text-align: right;
+      margin-right: 15px;
+      font-weight: bold;
+    }
+    .form-field input, .form-field textarea {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-field textarea {
+      resize: vertical;
+    }
+    .centered {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+    }
+    .submit-button {
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: auto;
+    }
+    .submit-button:disabled {
+      background-color: #ccc;
       cursor: not-allowed;
+    }
+    .status-message {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 1.2rem;
     }
   </style>
 </head>
 <body>
-
-  <!-- Logo -->
-  <img src="pastorijtuin_logo.jpg" alt="Pastorijtuin Logo" class="logo" />
+  <header>
+    <img src="logo.png" alt="Logo Pastorijtuin">
+    <h1>Pastorijtuin Reserveringssysteem</h1>
+    <p class="info-text">
+      Welkom op het reserveringssysteem van de Pastorijtuin. Vul de onderstaande velden in om een reservering te maken voor een tijdslot.
+    </p>
+  </header>
 
   <div class="container">
-    <!-- Infotekst vlak onder logo -->
-    <p class="infotekst">
-      Welkom op de website van de Pastorijtuin. Deze website wordt enkel gebruikt
-      door de bewoners en eigenaars van onze appartementen voor bepaalde toepassingen.
-      U hoeft niet regelmatig te kijken, enkel bij een melding of actie die u doorkrijgt.
-    </p>
-
-    <!-- Nieuwe, aangepaste tekst -->
-    <div class="hoofdstuk">
-      <p>
-        <strong>De RME tracht sinds enkele jaren een interessante groepsaankoop</strong> 
-        voor het onderhoud verwarmingsinstallatie en afleveren reinigings-& verbrandingsattest.
-        Dit jaar hebben we dit <em>opnieuw</em> kunnen bekomen bij
-        <strong>Bracq Alain</strong>, na vergelijkingen op de markt.
-      </p>
-      <p>
-        Gelieve onderstaand uw blok en tijdslot te selecteren. Indien 
-        er een slot niet meer beschikbaar is, zal u een melding krijgen.
-      </p>
+    <div class="form-field">
+      <label for="blok">Blok</label>
+      <input type="text" id="blok" placeholder="Bijv. BLOK 3" required>
     </div>
-
-    <!-- Checkbox + blokkeuzes -->
-    <div class="checkbox-section">
-      <label>
-        <input type="checkbox" id="prijsCheckbox" />
-        Ik heb de bovenstaande prijsstelling gelezen en begrepen.
-      </label>
+    <div class="form-field">
+      <label for="slot">Tijdslot</label>
+      <input type="text" id="slot" placeholder="Bijv. 8.15u" required>
     </div>
-
-    <div class="blok-buttons">
-      <button id="blok3Btn" disabled>BLOK 3</button>
-      <button id="blok3aBtn" disabled>BLOK 3A</button>
-      <button id="blok3bBtn" disabled>BLOK 3B</button>
-      <button id="blok3cBtn" disabled>BLOK 3C</button>
+    <div class="form-field">
+      <label for="name">Naam</label>
+      <input type="text" id="name" placeholder="Uw naam" required>
     </div>
-
-    <!-- Tijdslot-sectie -->
-    <div id="tijdslotSectie" class="tijdslot-sectie">
-      <h3 id="datumTitel"></h3>
-      <div id="tijdslotButtonsContainer"></div>
-      <br>
-      <button class="tijdslot-button" id="geenKeuzeBtn">
-        de datum of uur-keuze passen mij niet
-      </button>
+    <div class="form-field">
+      <label for="apartment">Adres</label>
+      <input type="text" id="apartment" placeholder="Bijv. Appartement BLOK 3" required>
     </div>
-
-    <!-- Formulier-sectie -->
-    <div id="formulierSectie" class="formulier-sectie">
-      <label class="formulier-label" for="naamInput">Naam:</label>
-      <input
-        type="text"
-        id="naamInput"
-        class="formulier-input"
-        placeholder="Vul je naam in..."
-        required
-      />
-
-      <label class="formulier-label" for="adresInput">
-        Adres appartement (verder aanvullen):
-      </label>
-      <input
-        type="text"
-        id="adresInput"
-        class="formulier-input"
-        placeholder="Blok X, verdiep, nr..."
-        required
-      />
-
-      <label class="formulier-label" for="contactInput">
-        GSM nr of e-mailadres:
-      </label>
-      <input
-        type="text"
-        id="contactInput"
-        class="formulier-input"
-        placeholder="GSM of e-mail..."
-        required
-      />
-
-      <label class="formulier-label" for="opmerkingenInput">
-        Opmerkingen (optioneel):
-      </label>
-      <textarea
-        id="opmerkingenInput"
-        class="formulier-input"
-        placeholder="Max 100 karakters"
-        maxlength="100"
-      ></textarea>
-
-      <button id="verzendBtn" class="btn-verzenden" disabled>VERZENDEN</button>
+    <div class="form-field">
+      <label for="contact">GSM of e-mail</label>
+      <input type="text" id="contact" placeholder="Bijv. 0491234567 of email@example.com" required>
     </div>
+    <div class="form-field centered">
+      <label for="remarks">Opmerkingen</label>
+      <textarea id="remarks" rows="4" placeholder="Eventuele opmerkingen"></textarea>
+    </div>
+    <div class="centered">
+      <button id="submit-button" class="submit-button" disabled>Verzenden</button>
+    </div>
+  </div>
 
-    <!-- Eindboodschap -->
-    <div id="finalMessage" class="final-message"></div>
-  </div> <!-- einde container -->
+  <div class="status-message" id="status-message"></div>
 
-<script>
-/* 
-   Dit is de frontend-logic. 
-   - USE_FAUNA = true als je concurrency-check + Fauna wilt.
-   - Anders false (dan is er geen 'rode balkjes' of concurrency-check).
-*/
+  <script>
+    // Enable button if all fields are filled
+    const fields = document.querySelectorAll("#blok, #slot, #name, #apartment, #contact");
+    const submitButton = document.getElementById("submit-button");
+    const statusMessage = document.getElementById("status-message");
 
-const USE_FAUNA = true;
-
-// 1) Lokaal blokData, overschreven door Fauna als USE_FAUNA = true
-let blokData = {
-  "BLOK 3": {
-    date: "05/03/2025",
-    timeslots: ["8.15u","9u","9.45u","10.30u","11.15u"],
-    selected: [false, false, false, false, false]
-  },
-  "BLOK 3A": {
-    date: "12/03/2025",
-    timeslots: ["8.15u","9u","9.45u","10.30u","11.15u"],
-    selected: [false, false, false, false, false]
-  },
-  "BLOK 3B": {
-    date: "27/03/2025",
-    timeslots: ["8.30u","9.15u","10u","10.45u","11.30u"],
-    selected: [false, false, false, false, false]
-  },
-  "BLOK 3C": {
-    date: "01/04/2025",
-    timeslots: ["8.30u","9.15u","10u","10.45u","11.30u"],
-    selected: [false, false, false, false, false]
-  }
-};
-
-// 2) DOM-elementen
-const prijsCheckbox = document.getElementById("prijsCheckbox");
-const blok3Btn = document.getElementById("blok3Btn");
-const blok3aBtn = document.getElementById("blok3aBtn");
-const blok3bBtn = document.getElementById("blok3bBtn");
-const blok3cBtn = document.getElementById("blok3cBtn");
-
-const tijdslotSectie = document.getElementById("tijdslotSectie");
-const datumTitel = document.getElementById("datumTitel");
-const tijdslotButtonsContainer = document.getElementById("tijdslotButtonsContainer");
-const geenKeuzeBtn = document.getElementById("geenKeuzeBtn");
-
-const formulierSectie = document.getElementById("formulierSectie");
-const naamInput = document.getElementById("naamInput");
-const adresInput = document.getElementById("adresInput");
-const contactInput = document.getElementById("contactInput");
-const opmerkingenInput = document.getElementById("opmerkingenInput");
-const verzendBtn = document.getElementById("verzendBtn");
-
-const finalMessage = document.getElementById("finalMessage");
-
-let currentBlok = null;
-let currentSlotIndex = -1;
-
-// 3) Events
-prijsCheckbox.addEventListener("change", () => {
-  const checked = prijsCheckbox.checked;
-  blok3Btn.disabled  = !checked;
-  blok3aBtn.disabled = !checked;
-  blok3bBtn.disabled = !checked;
-  blok3cBtn.disabled = !checked;
-});
-
-blok3Btn.addEventListener("click", () => showTimeslots("BLOK 3"));
-blok3aBtn.addEventListener("click", () => showTimeslots("BLOK 3A"));
-blok3bBtn.addEventListener("click", () => showTimeslots("BLOK 3B"));
-blok3cBtn.addEventListener("click", () => showTimeslots("BLOK 3C"));
-
-geenKeuzeBtn.addEventListener("click", () => {
-  currentSlotIndex = -1;
-  showFormulier();
-});
-
-// Form-validatie
-[naamInput, adresInput, contactInput, opmerkingenInput].forEach(el => {
-  el.addEventListener("input", checkFormValid);
-});
-
-verzendBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  handleVerzenden();
-});
-
-// 4) Fauna-data laden bij paginalaad
-window.addEventListener("DOMContentLoaded", async () => {
-  if (USE_FAUNA) {
-    await loadSlotsFromFauna();
-  }
-});
-
-// 5) Functies
-function showTimeslots(blok) {
-  currentBlok = blok;
-  tijdslotSectie.style.display = "block";
-  formulierSectie.style.display = "none";
-  finalMessage.style.display = "none";
-
-  datumTitel.textContent = `Datum voor ${blok}: ${blokData[blok].date}`;
-  tijdslotButtonsContainer.innerHTML = "";
-
-  blokData[blok].timeslots.forEach((slot, index) => {
-    const btn = document.createElement("button");
-    btn.textContent = slot;
-
-    if (blokData[blok].selected[index]) {
-      // al bezet
-      btn.classList.add("tijdslot-button", "busy");
-      btn.disabled = true;
-    } else {
-      // vrij
-      btn.classList.add("tijdslot-button", "free");
-      btn.disabled = false;
-      btn.addEventListener("click", () => {
-        currentSlotIndex = index;
-        showFormulier();
+    fields.forEach(field => {
+      field.addEventListener("input", () => {
+        const allFilled = Array.from(fields).every(input => input.value.trim() !== "");
+        submitButton.disabled = !allFilled;
       });
-    }
-    tijdslotButtonsContainer.appendChild(btn);
-  });
-}
-
-function showFormulier() {
-  tijdslotSectie.style.display = "none";
-  formulierSectie.style.display = "block";
-  finalMessage.style.display = "none";
-
-  // autom. invullen van de blok in "adresInput"
-  if (currentSlotIndex !== -1) {
-    adresInput.value = currentBlok + " "; // bv. "BLOK 3 "
-  } else {
-    adresInput.value = ""; 
-  }
-
-  checkFormValid();
-}
-
-function checkFormValid() {
-  const allRequired = (
-    naamInput.value.trim() &&
-    adresInput.value.trim() &&
-    contactInput.value.trim()
-  );
-  verzendBtn.disabled = !allRequired;
-}
-
-async function handleVerzenden() {
-  const naamVal = naamInput.value.trim();
-  const adresVal = adresInput.value.trim();
-  const contactVal = contactInput.value.trim();
-  const opmerkingenVal = opmerkingenInput.value.trim();
-
-  let chosenSlotText = "";
-  if (currentSlotIndex === -1) {
-    chosenSlotText = "GEEN datum/uur (past niet)";
-  } else {
-    chosenSlotText = blokData[currentBlok].timeslots[currentSlotIndex];
-  }
-
-  // 1) Verstuur mail via Formspree
-  try {
-    await fetch("https://formspree.io/f/mkgondal", {
-      method: "POST",
-      headers: { "Accept": "application/json", "Content-Type": "application/json" },
-      body: JSON.stringify({
-        blok: currentBlok,
-        tijdslot: chosenSlotText,
-        naam: naamVal,
-        adres: adresVal,
-        contact: contactVal,
-        opmerkingen: opmerkingenVal
-      })
     });
-  } catch (err) {
-    alert("Fout bij mail versturen: " + err);
-  }
 
-  // 2) Markeer slot in Fauna (als we wel een slot kozen)
-  if (USE_FAUNA && currentSlotIndex !== -1) {
-    try {
-      const response = await fetch("/.netlify/functions/reserve", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ blok: currentBlok, index: currentSlotIndex })
-      });
+    submitButton.addEventListener("click", async () => {
+      // Verzamel gegevens
+      const data = {
+        blok: document.getElementById("blok").value.trim(),
+        slot: document.getElementById("slot").value.trim(),
+        name: document.getElementById("name").value.trim(),
+        apartment: document.getElementById("apartment").value.trim(),
+        contact: document.getElementById("contact").value.trim(),
+        remarks: document.getElementById("remarks").value.trim()
+      };
 
-      if (response.status === 409) {
-        alert("Dit tijdslot is net door iemand anders geboekt! Kies een ander slot.");
-        await loadSlotsFromFauna(); // UI-refresh
-        return;
+      // Stuur POST-verzoek naar de Netlify Function
+      try {
+        const response = await fetch("/.netlify/functions/reserve", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        if (response.status === 200) {
+          statusMessage.textContent = "Reservering succesvol! Uw slot is gereserveerd.";
+          statusMessage.style.color = "green";
+        } else if (response.status === 409) {
+          statusMessage.textContent = "Het tijdslot is al gereserveerd. Kies een ander slot.";
+          statusMessage.style.color = "red";
+        } else {
+          statusMessage.textContent = "Er is een fout opgetreden. Probeer het opnieuw.";
+          statusMessage.style.color = "red";
+        }
+      } catch (error) {
+        console.error(error);
+        statusMessage.textContent = "Er is een fout opgetreden. Probeer het opnieuw.";
+        statusMessage.style.color = "red";
       }
-      if (!response.ok) {
-        throw new Error("Fauna error: " + response.status);
-      }
-
-      const updatedData = await response.json();
-      blokData = updatedData;
-
-    } catch (err) {
-      alert("Fout bij Fauna reservering: " + err);
-      return;
-    }
-  }
-
-  // 3) Eindboodschap
-  if (currentSlotIndex !== -1) {
-    showFinalMessage(true, currentBlok, blokData[currentBlok].date, chosenSlotText);
-  } else {
-    showFinalMessage(false);
-  }
-
-  // 4) Reset velden
-  naamInput.value = "";
-  adresInput.value = "";
-  contactInput.value = "";
-  opmerkingenInput.value = "";
-  currentBlok = null;
-  currentSlotIndex = -1;
-  verzendBtn.disabled = true;
-}
-
-function showFinalMessage(chosenSlot, blok = "", datum = "", uur = "") {
-  tijdslotSectie.style.display = "none";
-  formulierSectie.style.display = "none";
-  finalMessage.style.display = "block";
-
-  if (chosenSlot) {
-    finalMessage.innerHTML = `
-      <h2>GELUKT!</h2>
-      <p>U koos voor <strong>${blok}</strong> op <strong>${datum}</strong>
-         om <strong>${uur}</strong>.</p>
-      <p>Wij bevestigen via de Whatsapp-groep zo snel mogelijk
-         het aantal deelnemers en de corresponderende prijs.</p>
-    `;
-  } else {
-    finalMessage.innerHTML = `
-      <h2>Geen geschikte datum/uur</h2>
-      <p>
-        Beste bewoner/eigenaar, wij begrijpen dat een 
-        gereserveerde datum of uurslot soms niet past. 
-        Wij contacteren u zo snel mogelijk voor een alternatief.
-      </p>
-    `;
-  }
-}
-
-/* Ophalen data uit Fauna (GET ?mode=get) */
-async function loadSlotsFromFauna() {
-  try {
-    const resp = await fetch("/.netlify/functions/reserve?mode=get");
-    if (!resp.ok) {
-      console.error("Fout bij GET Fauna:", resp.status);
-      return;
-    }
-    const data = await resp.json();
-    blokData = data;
-  } catch (err) {
-    console.error("Error fetch fauna:", err);
-  }
-}
-</script>
+    });
+  </script>
 </body>
 </html>
