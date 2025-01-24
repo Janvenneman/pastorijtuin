@@ -239,29 +239,69 @@
   </div> <!-- einde container -->
 
 <script>
+  // Supabase configuratie
   const SUPABASE_URL = "https://jnnuhpcsygstrvhrbyna.supabase.co";
   const SUPABASE_KEY = "<SUPABASE_SERVICE_ROLE_KEY>";
-
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  async function loadSlotsFromSupabase() {
-    try {
-      const { data, error } = await supabase
-        .from("time_slots")
-        .select("*");
+  // DOM-elementen
+  const prijsCheckbox = document.getElementById("prijsCheckbox");
+  const blok3Btn = document.getElementById("blok3Btn");
+  const blok3aBtn = document.getElementById("blok3aBtn");
+  const blok3bBtn = document.getElementById("blok3bBtn");
+  const blok3cBtn = document.getElementById("blok3cBtn");
+  const tijdslotSectie = document.getElementById("tijdslotSectie");
+  const tijdslotButtonsContainer = document.getElementById("tijdslotButtonsContainer");
+  const datumTitel = document.getElementById("datumTitel");
 
-      if (error) {
-        console.error("Fout bij ophalen slots:", error.message);
-      } else {
-        console.log("Data uit Supabase geladen:", data);
-      }
-    } catch (err) {
-      console.error("Unexpected error:", err);
-    }
+  let blokData = {};
+
+  // Activeer blokknoppen na het aanvinken van de checkbox
+  prijsCheckbox.addEventListener("change", () => {
+    const isChecked = prijsCheckbox.checked;
+    blok3Btn.disabled = !isChecked;
+    blok3aBtn.disabled = !isChecked;
+    blok3bBtn.disabled = !isChecked;
+    blok3cBtn.disabled = !isChecked;
+  });
+
+  // Blok-selectie
+  blok3Btn.addEventListener("click", () => showTimeslots("BLOK 3"));
+  blok3aBtn.addEventListener("click", () => showTimeslots("BLOK 3A"));
+  blok3bBtn.addEventListener("click", () => showTimeslots("BLOK 3B"));
+  blok3cBtn.addEventListener("click", () => showTimeslots("BLOK 3C"));
+
+  // Tijdsloten tonen
+  function showTimeslots(blok) {
+    const blokInfo = blokData[blok];
+    tijdslotSectie.style.display = "block";
+    datumTitel.textContent = `Datum voor ${blok}: ${blokInfo.date}`;
+    tijdslotButtonsContainer.innerHTML = "";
+
+    blokInfo.timeslots.forEach((slot, index) => {
+      const button = document.createElement("button");
+      button.textContent = slot;
+      button.className = blokInfo.selected[index] ? "tijdslot-button busy" : "tijdslot-button free";
+      button.disabled = blokInfo.selected[index];
+      tijdslotButtonsContainer.appendChild(button);
+    });
   }
 
-  // Laad data bij paginalaad
-  loadSlotsFromSupabase();
+  // Data laden uit Supabase
+  async function loadSlotsFromSupabase() {
+    const { data, error } = await supabase.from("time_slots").select("*");
+    if (error) console.error("Fout bij Supabase:", error.message);
+
+    blokData = data.reduce((acc, row) => {
+      if (!acc[row.blok]) acc[row.blok] = { date: row.date_str, timeslots: [], selected: [] };
+      acc[row.blok].timeslots.push(row.slot_label);
+      acc[row.blok].selected.push(row.is_selected);
+      return acc;
+    }, {});
+  }
+
+  // Data ophalen bij paginalaad
+  window.addEventListener("DOMContentLoaded", loadSlotsFromSupabase);
 </script>
 </body>
 </html>
