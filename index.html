@@ -8,7 +8,7 @@
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
-      background-color: #ccffcc; /* lichtgroen */
+      background-color: #ccffcc;
       text-align: center;
     }
     .container {
@@ -106,7 +106,7 @@
     }
   </style>
   <!-- Supabase JavaScript SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.1.1"></script>
 </head>
 <body>
 
@@ -170,10 +170,10 @@
     <div id="finalMessage" class="final-message"></div>
   </div>
 
-  <!-- JavaScript: Supabase initialisatie en logica -->
+  <!-- JavaScript: Supabase Initialisatie -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // Supabase-configuratie
+      // Supabase configuratie
       const SUPABASE_URL = "https://jnnuhpcsygstrvhrbyna.supabase.co";
       const SUPABASE_KEY = "<SUPABASE_SERVICE_ROLE_KEY>";
       const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
