@@ -30,16 +30,10 @@
       font-size: 1.1em;
       margin-bottom: 20px;
     }
-    .hoofdstuk {
-      color: #000;
-      margin: 20px 0;
-      text-align: left;
-      line-height: 1.4;
-    }
     table {
       border-collapse: collapse;
-      width: 100%;
-      margin: 20px 0;
+      width: 300px;
+      margin: 0 auto 20px auto;
     }
     th, td {
       border: 1px solid #000;
@@ -48,6 +42,20 @@
     }
     th {
       background-color: #ddd;
+    }
+    .blok-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 20px;
+    }
+    .matrix {
+      flex: 1;
+      margin-right: 20px;
+    }
+    .blok-buttons {
+      flex: 2;
+      text-align: left;
     }
     .blok-buttons button {
       margin: 5px;
@@ -59,19 +67,21 @@
       background-color: #ccc;
       cursor: not-allowed;
     }
+    .tijdslot-container {
+      margin-top: 20px;
+    }
     .tijdslot-button {
       margin: 5px;
       padding: 8px 12px;
       font-size: 1em;
       cursor: pointer;
+      color: #fff;
     }
     .tijdslot-button.free {
       background-color: green;
-      color: #fff;
     }
     .tijdslot-button.selected {
       background-color: blue;
-      color: #fff;
     }
     iframe {
       border: none;
@@ -95,16 +105,6 @@
       U hoeft niet regelmatig te kijken, enkel bij een melding of actie die u doorkrijgt.
     </p>
 
-    <div class="hoofdstuk">
-      <p>
-        <strong>De RME tracht sinds enkele jaren een interessante groepsaankoop</strong> 
-        voor het onderhoud verwarmingsinstallatie en afleveren reinigings-& verbrandingsattest.
-        Dit jaar hebben we dit <em>opnieuw</em> kunnen bekomen bij
-        <strong>Bracq Alain</strong>, na vergelijkingen op de markt.
-      </p>
-    </div>
-
-    <!-- Checkbox -->
     <div>
       <label>
         <input type="checkbox" id="prijsCheckbox" />
@@ -112,27 +112,67 @@
       </label>
     </div>
 
-    <!-- Blokken -->
-    <div id="blokSectie" class="blok-buttons hidden">
-      <button onclick="selectBlok('BLOK 3', '05/03/2025')">BLOK 3</button>
-      <button onclick="selectBlok('BLOK 3A', '12/03/2025')">BLOK 3A</button>
-      <button onclick="selectBlok('BLOK 3B', '27/03/2025')">BLOK 3B</button>
-      <button onclick="selectBlok('BLOK 3C', '01/04/2025')">BLOK 3C</button>
+    <!-- Matrix en Blokken -->
+    <div id="blokSectie" class="blok-container hidden">
+      <div class="matrix">
+        <h3>Prijzenmatrix</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Deelnemers</th>
+              <th>Prijs (excl. BTW)</th>
+              <th>Prijs (incl. BTW)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>10</td>
+              <td>€137</td>
+              <td>€165.77</td>
+            </tr>
+            <tr>
+              <td>15</td>
+              <td>€127</td>
+              <td>€153.67</td>
+            </tr>
+            <tr>
+              <td>20</td>
+              <td>€117</td>
+              <td>€141.57</td>
+            </tr>
+            <tr>
+              <td>25</td>
+              <td>€107</td>
+              <td>€129.47</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="blok-buttons">
+        <h3>Blokken</h3>
+        <button onclick="selectBlok('BLOK 3', '05/03/2025')">BLOK 3</button>
+        <button onclick="selectBlok('BLOK 3A', '12/03/2025')">BLOK 3A</button>
+        <button onclick="selectBlok('BLOK 3B', '27/03/2025')">BLOK 3B</button>
+        <button onclick="selectBlok('BLOK 3C', '01/04/2025')">BLOK 3C</button>
+      </div>
     </div>
 
     <!-- Tijdsloten -->
     <div id="tijdslotSectie" class="hidden">
       <h3 id="blokDatum"></h3>
-      <button class="tijdslot-button free" onclick="selectTijdslot('8.15u')">8.15u</button>
-      <button class="tijdslot-button free" onclick="selectTijdslot('9u')">9u</button>
-      <button class="tijdslot-button free" onclick="selectTijdslot('9.45u')">9.45u</button>
-      <button class="tijdslot-button free" onclick="selectTijdslot('10.30u')">10.30u</button>
-      <button class="tijdslot-button free" onclick="selectTijdslot('11.15u')">11.15u</button>
+      <div class="tijdslot-container">
+        <button class="tijdslot-button free" onclick="selectTijdslot('8.15u')">8.15u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('9u')">9u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('9.45u')">9.45u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('10.30u')">10.30u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('11.15u')">11.15u</button>
+      </div>
     </div>
 
     <!-- Google Formulier -->
     <div id="formulierSectie" class="hidden">
       <iframe 
+        id="googleForm"
         src="https://docs.google.com/forms/d/e/1FAIpQLSd15CfhFY3MSSr_Hb8Ewx4pY5NfZUlSP5KrWytF3NDFnbAvbw/viewform?embedded=true" 
         frameborder="0">
         Laden…
@@ -146,6 +186,7 @@
     const tijdslotSectie = document.getElementById("tijdslotSectie");
     const formulierSectie = document.getElementById("formulierSectie");
     const blokDatum = document.getElementById("blokDatum");
+    const googleForm = document.getElementById("googleForm");
 
     let gekozenBlok = '';
     let gekozenTijdslot = '';
@@ -169,7 +210,17 @@
 
     function selectTijdslot(tijdslot) {
       gekozenTijdslot = tijdslot;
-      alert(`U koos: ${gekozenBlok}, Tijdslot: ${gekozenTijdslot}`);
+
+      // Pas het Google Formulier aan
+      const queryParams = new URLSearchParams({
+        "entry.123456789": gekozenBlok, // Vervang door juiste veld-ID
+        "entry.987654321": `${gekozenTijdslot}`, // Vervang door juiste veld-ID
+      });
+
+      googleForm.src = `https://docs.google.com/forms/d/e/1FAIpQLSd15CfhFY3MSSr_Hb8Ewx4pY5NfZUlSP5KrWytF3NDFnbAvbw/viewform?embedded=true&${queryParams}`;
+
+      tijdslotSectie.classList.add("hidden");
+      blokSectie.classList.add("hidden");
       formulierSectie.classList.remove("hidden");
     }
   </script>
