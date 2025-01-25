@@ -83,9 +83,6 @@
     .tijdslot-button.free {
       background-color: green;
     }
-    .tijdslot-button.selected {
-      background-color: blue;
-    }
     iframe {
       border: none;
       width: 100%;
@@ -102,7 +99,7 @@
   <img src="pastorijtuin_logo.jpg" alt="Pastorijtuin Logo" class="logo" />
 
   <div class="container">
-    <p class="infotekst">
+    <p class="infotekst" id="infoTekst">
       Welkom op de website van de Pastorijtuin. Deze website wordt enkel gebruikt
       door de bewoners en eigenaars van onze appartementen voor bepaalde toepassingen.
       U hoeft niet regelmatig te kijken, enkel bij een melding of actie die u doorkrijgt.
@@ -154,37 +151,7 @@
 
     <!-- Blokken -->
     <div id="blokSectie" class="blok-container hidden">
-      <div class="matrix" id="matrixSmall">
-        <h3>Prijzenmatrix</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Deelnemers</th>
-              <th>Prijs (excl. BTW)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>10</td>
-              <td>€137</td>
-            </tr>
-            <tr>
-              <td>15</td>
-              <td>€127</td>
-            </tr>
-            <tr>
-              <td>20</td>
-              <td>€117</td>
-            </tr>
-            <tr>
-              <td>25</td>
-              <td>€107</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
       <div class="blok-buttons">
-        <h3>Blokken</h3>
         <button onclick="selectBlok('BLOK 3', '05/03/2025')">BLOK 3</button>
         <button onclick="selectBlok('BLOK 3A', '12/03/2025')">BLOK 3A</button>
         <button onclick="selectBlok('BLOK 3B', '27/03/2025')">BLOK 3B</button>
@@ -194,7 +161,8 @@
 
     <!-- Tijdsloten -->
     <div id="tijdslotSectie" class="hidden">
-      <h3 id="blokDatum"></h3>
+      <h3 id="gekozenBlok"></h3>
+      <p id="blokDatum" style="font-size: 1.2em; font-weight: bold;"></p>
       <div class="tijdslot-container">
         <button class="tijdslot-button free" onclick="selectTijdslot('8.15u')">8.15u</button>
         <button class="tijdslot-button free" onclick="selectTijdslot('9u')">9u</button>
@@ -220,39 +188,43 @@
     const blokSectie = document.getElementById("blokSectie");
     const tijdslotSectie = document.getElementById("tijdslotSectie");
     const formulierSectie = document.getElementById("formulierSectie");
+    const matrixSectie = document.getElementById("matrixSectie");
+    const infoTekst = document.getElementById("infoTekst");
+    const gekozenBlok = document.getElementById("gekozenBlok");
     const blokDatum = document.getElementById("blokDatum");
     const googleForm = document.getElementById("googleForm");
 
-    let gekozenBlok = '';
-    let gekozenTijdslot = '';
+    let geselecteerdeBlok = '';
+    let geselecteerdeTijdslot = '';
 
     prijsCheckbox.addEventListener("change", () => {
       if (prijsCheckbox.checked) {
         blokSectie.classList.remove("hidden");
-        document.getElementById("matrixSectie").classList.add("hidden");
+        matrixSectie.classList.add("hidden");
       }
     });
 
     function selectBlok(blok, datum) {
-      gekozenBlok = blok;
-      blokDatum.textContent = `${blok} - Datum: ${datum}`;
+      geselecteerdeBlok = blok;
+      blokDatum.textContent = datum;
+      gekozenBlok.textContent = blok;
+
       tijdslotSectie.classList.remove("hidden");
-      formulierSectie.classList.add("hidden");
+      blokSectie.classList.add("hidden");
     }
 
     function selectTijdslot(tijdslot) {
-      gekozenTijdslot = tijdslot;
+      geselecteerdeTijdslot = tijdslot;
 
-      // Pas het Google Formulier aan
+      // Update Google Form URL
       const queryParams = new URLSearchParams({
-        "entry.123456789": gekozenBlok,
-        "entry.987654321": gekozenTijdslot,
+        "entry.123456789": geselecteerdeBlok,
+        "entry.987654321": `${blokDatum.textContent} - ${tijdslot}`,
       });
 
       googleForm.src = `https://docs.google.com/forms/d/e/1FAIpQLSd15CfhFY3MSSr_Hb8Ewx4pY5NfZUlSP5KrWytF3NDFnbAvbw/viewform?embedded=true&${queryParams}`;
 
       tijdslotSectie.classList.add("hidden");
-      blokSectie.classList.add("hidden");
       formulierSectie.classList.remove("hidden");
     }
   </script>
