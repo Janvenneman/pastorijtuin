@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>De Pastorijtuin - Reservering</title>
   <style>
-    /* Algemeen */
+    /* Je originele CSS blijft ongewijzigd */
     body {
       margin: 0;
       padding: 0;
@@ -17,17 +17,13 @@
       margin: 0 auto;
       padding: 20px;
     }
-
-    /* Logo groter */
     .logo {
       display: block;
       margin: 20px auto 10px auto;
-      max-width: 500px; /* Grotere logo */
+      max-width: 500px;
       width: 100%;
       height: auto;
     }
-
-    /* Infotekst: vet, grijs, ander lettertype */
     .infotekst {
       font-family: Georgia, serif;
       font-weight: bold;
@@ -35,16 +31,12 @@
       font-size: 1.1em;
       margin-bottom: 20px;
     }
-
-    /* Hoofdstuk / tekst */
     .hoofdstuk {
       color: #000;
       margin: 20px 0;
       text-align: left;
       line-height: 1.4;
     }
-
-    /* Tabel e.d. */
     table {
       border-collapse: collapse;
       width: 100%;
@@ -58,8 +50,6 @@
     th {
       background-color: #ddd;
     }
-
-    /* Checkbox / blokknoppen */
     .checkbox-section {
       margin: 20px 0;
     }
@@ -76,8 +66,6 @@
       background-color: #999;
       cursor: not-allowed;
     }
-
-    /* Tijdslot-sectie */
     .tijdslot-sectie,
     .formulier-sectie,
     .final-message {
@@ -85,11 +73,9 @@
       padding: 15px;
       border: 1px solid #666;
       background-color: #eee;
-      display: none; /* verborgen tot we ze tonen via JS */
+      display: none;
       text-align: center;
     }
-
-    /* Tijdslot-kleurcodes */
     .tijdslot-button {
       margin: 5px;
       padding: 8px 12px;
@@ -107,8 +93,6 @@
       background-color: orange;
       color: #fff;
     }
-
-    /* Formulier */
     .formulier-label {
       display: block;
       margin: 10px 0 5px;
@@ -135,21 +119,21 @@
       cursor: not-allowed;
     }
   </style>
+  <!-- Voeg de Supabase JavaScript SDK toe -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
 
-  <!-- Logo -->
+  <!-- Je originele HTML blijft ongewijzigd -->
   <img src="pastorijtuin_logo.jpg" alt="Pastorijtuin Logo" class="logo" />
 
   <div class="container">
-    <!-- Infotekst vlak onder logo -->
     <p class="infotekst">
       Welkom op de website van de Pastorijtuin. Deze website wordt enkel gebruikt
       door de bewoners en eigenaars van onze appartementen voor bepaalde toepassingen.
       U hoeft niet regelmatig te kijken, enkel bij een melding of actie die u doorkrijgt.
     </p>
 
-    <!-- Nieuwe, aangepaste tekst -->
     <div class="hoofdstuk">
       <p>
         <strong>De RME tracht sinds enkele jaren een interessante groepsaankoop</strong> 
@@ -163,7 +147,6 @@
       </p>
     </div>
 
-    <!-- Checkbox + blokkeuzes -->
     <div class="checkbox-section">
       <label>
         <input type="checkbox" id="prijsCheckbox" />
@@ -178,7 +161,6 @@
       <button id="blok3cBtn" disabled>BLOK 3C</button>
     </div>
 
-    <!-- Tijdslot-sectie -->
     <div id="tijdslotSectie" class="tijdslot-sectie">
       <h3 id="datumTitel"></h3>
       <div id="tijdslotButtonsContainer"></div>
@@ -188,55 +170,20 @@
       </button>
     </div>
 
-    <!-- Formulier-sectie -->
     <div id="formulierSectie" class="formulier-sectie">
       <label class="formulier-label" for="naamInput">Naam:</label>
-      <input
-        type="text"
-        id="naamInput"
-        class="formulier-input"
-        placeholder="Vul je naam in..."
-        required
-      />
-
-      <label class="formulier-label" for="adresInput">
-        Adres appartement (verder aanvullen):
-      </label>
-      <input
-        type="text"
-        id="adresInput"
-        class="formulier-input"
-        placeholder="Blok X, verdiep, nr..."
-        required
-      />
-
-      <label class="formulier-label" for="contactInput">
-        GSM nr of e-mailadres:
-      </label>
-      <input
-        type="text"
-        id="contactInput"
-        class="formulier-input"
-        placeholder="GSM of e-mail..."
-        required
-      />
-
-      <label class="formulier-label" for="opmerkingenInput">
-        Opmerkingen (optioneel):
-      </label>
-      <textarea
-        id="opmerkingenInput"
-        class="formulier-input"
-        placeholder="Max 100 karakters"
-        maxlength="100"
-      ></textarea>
-
+      <input type="text" id="naamInput" class="formulier-input" placeholder="Vul je naam in..." required />
+      <label class="formulier-label" for="adresInput">Adres appartement (verder aanvullen):</label>
+      <input type="text" id="adresInput" class="formulier-input" placeholder="Blok X, verdiep, nr..." required />
+      <label class="formulier-label" for="contactInput">GSM nr of e-mailadres:</label>
+      <input type="text" id="contactInput" class="formulier-input" placeholder="GSM of e-mail..." required />
+      <label class="formulier-label" for="opmerkingenInput">Opmerkingen (optioneel):</label>
+      <textarea id="opmerkingenInput" class="formulier-input" placeholder="Max 100 karakters" maxlength="100"></textarea>
       <button id="verzendBtn" class="btn-verzenden" disabled>VERZENDEN</button>
     </div>
 
-    <!-- Eindboodschap -->
     <div id="finalMessage" class="final-message"></div>
-  </div> <!-- einde container -->
+  </div>
 
 <script>
   // Supabase configuratie
@@ -244,63 +191,19 @@
   const SUPABASE_KEY = "<SUPABASE_SERVICE_ROLE_KEY>";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // DOM-elementen
-  const prijsCheckbox = document.getElementById("prijsCheckbox");
-  const blok3Btn = document.getElementById("blok3Btn");
-  const blok3aBtn = document.getElementById("blok3aBtn");
-  const blok3bBtn = document.getElementById("blok3bBtn");
-  const blok3cBtn = document.getElementById("blok3cBtn");
-  const tijdslotSectie = document.getElementById("tijdslotSectie");
-  const tijdslotButtonsContainer = document.getElementById("tijdslotButtonsContainer");
-  const datumTitel = document.getElementById("datumTitel");
+  // Debugging: Log Supabase-client
+  console.log("Supabase-client aangemaakt:", supabase);
 
-  let blokData = {};
-
-  // Activeer blokknoppen na het aanvinken van de checkbox
-  prijsCheckbox.addEventListener("change", () => {
-    const isChecked = prijsCheckbox.checked;
-    blok3Btn.disabled = !isChecked;
-    blok3aBtn.disabled = !isChecked;
-    blok3bBtn.disabled = !isChecked;
-    blok3cBtn.disabled = !isChecked;
-  });
-
-  // Blok-selectie
-  blok3Btn.addEventListener("click", () => showTimeslots("BLOK 3"));
-  blok3aBtn.addEventListener("click", () => showTimeslots("BLOK 3A"));
-  blok3bBtn.addEventListener("click", () => showTimeslots("BLOK 3B"));
-  blok3cBtn.addEventListener("click", () => showTimeslots("BLOK 3C"));
-
-  // Tijdsloten tonen
-  function showTimeslots(blok) {
-    const blokInfo = blokData[blok];
-    tijdslotSectie.style.display = "block";
-    datumTitel.textContent = `Datum voor ${blok}: ${blokInfo.date}`;
-    tijdslotButtonsContainer.innerHTML = "";
-
-    blokInfo.timeslots.forEach((slot, index) => {
-      const button = document.createElement("button");
-      button.textContent = slot;
-      button.className = blokInfo.selected[index] ? "tijdslot-button busy" : "tijdslot-button free";
-      button.disabled = blokInfo.selected[index];
-      tijdslotButtonsContainer.appendChild(button);
-    });
-  }
-
-  // Data laden uit Supabase
   async function loadSlotsFromSupabase() {
     const { data, error } = await supabase.from("time_slots").select("*");
-    if (error) console.error("Fout bij Supabase:", error.message);
-
-    blokData = data.reduce((acc, row) => {
-      if (!acc[row.blok]) acc[row.blok] = { date: row.date_str, timeslots: [], selected: [] };
-      acc[row.blok].timeslots.push(row.slot_label);
-      acc[row.blok].selected.push(row.is_selected);
-      return acc;
-    }, {});
+    if (error) {
+      console.error("Fout bij Supabase:", error.message);
+      return;
+    }
+    console.log("Tijdsloten opgehaald:", data);
   }
 
-  // Data ophalen bij paginalaad
+  // Data laden bij paginalaad
   window.addEventListener("DOMContentLoaded", loadSlotsFromSupabase);
 </script>
 </body>
