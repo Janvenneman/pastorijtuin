@@ -179,22 +179,31 @@
   </div>
 
   <script>
-    // Voor de platte website maken we alles handmatig zichtbaar
-    document.getElementById("prijsCheckbox").addEventListener("change", function () {
-      const isChecked = this.checked;
-      document.getElementById("blok3Btn").disabled = !isChecked;
-      document.getElementById("blok3aBtn").disabled = !isChecked;
-      document.getElementById("blok3bBtn").disabled = !isChecked;
-      document.getElementById("blok3cBtn").disabled = !isChecked;
+    const prijsCheckbox = document.getElementById("prijsCheckbox");
+    const blokButtons = document.querySelectorAll(".blok-buttons button");
+    const tijdslotSectie = document.getElementById("tijdslotSectie");
+    const formulierSectie = document.getElementById("formulierSectie");
+    const finalMessage = document.getElementById("finalMessage");
 
-      if (isChecked) {
-        document.getElementById("tijdslotSectie").style.display = "block";
-      }
+    prijsCheckbox.addEventListener("change", () => {
+      blokButtons.forEach(button => button.disabled = !prijsCheckbox.checked);
     });
 
-    document.getElementById("verzendBtn").addEventListener("click", function () {
-      document.getElementById("formulierSectie").style.display = "none";
-      document.getElementById("finalMessage").style.display = "block";
+    document.querySelectorAll(".tijdslot-button.free").forEach(button => {
+      button.addEventListener("click", () => {
+        tijdslotSectie.style.display = "none";
+        formulierSectie.style.display = "block";
+      });
+    });
+
+    document.getElementById("geenKeuzeBtn").addEventListener("click", () => {
+      tijdslotSectie.style.display = "none";
+      formulierSectie.style.display = "block";
+    });
+
+    document.getElementById("verzendBtn").addEventListener("click", () => {
+      formulierSectie.style.display = "none";
+      finalMessage.style.display = "block";
     });
   </script>
 </body>
