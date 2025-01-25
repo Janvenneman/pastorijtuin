@@ -145,14 +145,8 @@
     </div>
 
     <div id="tijdslotSectie" class="tijdslot-sectie">
-      <h3 id="datumTitel">Datum voor BLOK 3: 05/03/2025</h3>
-      <div id="tijdslotButtonsContainer">
-        <button class="tijdslot-button free">8.15u</button>
-        <button class="tijdslot-button free">9u</button>
-        <button class="tijdslot-button busy" disabled>9.45u</button>
-        <button class="tijdslot-button free">10.30u</button>
-        <button class="tijdslot-button free">11.15u</button>
-      </div>
+      <h3 id="datumTitel"></h3>
+      <div id="tijdslotButtonsContainer"></div>
       <br>
       <button class="tijdslot-button" id="geenKeuzeBtn">
         de datum of uur-keuze passen mij niet
@@ -182,23 +176,55 @@
     const prijsCheckbox = document.getElementById("prijsCheckbox");
     const blokButtons = document.querySelectorAll(".blok-buttons button");
     const tijdslotSectie = document.getElementById("tijdslotSectie");
+    const tijdslotButtonsContainer = document.getElementById("tijdslotButtonsContainer");
     const formulierSectie = document.getElementById("formulierSectie");
     const finalMessage = document.getElementById("finalMessage");
+
+    const blokData = {
+      "BLOK 3": {
+        date: "05/03/2025",
+        timeslots: ["8.15u", "9u", "9.45u", "10.30u", "11.15u"],
+        selected: [false, false, true, false, false] // voorbeeld: derde tijdslot is al bezet
+      },
+      "BLOK 3A": {
+        date: "12/03/2025",
+        timeslots: ["8.15u", "9u", "9.45u", "10.30u", "11.15u"],
+        selected: [false, true, false, false, false]
+      }
+    };
 
     prijsCheckbox.addEventListener("change", () => {
       blokButtons.forEach(button => button.disabled = !prijsCheckbox.checked);
     });
 
-    document.querySelectorAll(".tijdslot-button.free").forEach(button => {
+    blokButtons.forEach(button => {
       button.addEventListener("click", () => {
-        tijdslotSectie.style.display = "none";
-        formulierSectie.style.display = "block";
-      });
-    });
+        const blok = button.textContent;
+        const blokInfo = blokData[blok];
 
-    document.getElementById("geenKeuzeBtn").addEventListener("click", () => {
-      tijdslotSectie.style.display = "none";
-      formulierSectie.style.display = "block";
+        tijdslotSectie.style.display = "block";
+        formulierSectie.style.display = "none";
+        finalMessage.style.display = "none";
+
+        document.getElementById("datumTitel").textContent = `Datum voor ${blok}: ${blokInfo.date}`;
+        tijdslotButtonsContainer.innerHTML = "";
+
+        blokInfo.timeslots.forEach((slot, index) => {
+          const btn = document.createElement("button");
+          btn.textContent = slot;
+          btn.className = blokInfo.selected[index] ? "tijdslot-button busy" : "tijdslot-button free";
+          btn.disabled = blokInfo.selected[index];
+
+          if (!blokInfo.selected[index]) {
+            btn.addEventListener("click", () => {
+              tijdslotSectie.style.display = "none";
+              formulierSectie.style.display = "block";
+            });
+          }
+
+          tijdslotButtonsContainer.appendChild(btn);
+        });
+      });
     });
 
     document.getElementById("verzendBtn").addEventListener("click", () => {
