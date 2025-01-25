@@ -51,6 +51,7 @@
     }
     .blok {
       margin-bottom: 30px;
+      display: none; /* Verborgen totdat checkbox wordt aangevinkt */
     }
     .tijdslot-button {
       margin: 5px;
@@ -150,22 +151,42 @@
     </div>
 
     <!-- Blokken en tijdsloten -->
-    <div id="blokSectie" class="blok">
-      <h2>BLOK 3 - Datum: 05/03/2025</h2>
-      <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3', '8.15u')">8.15u</button>
-      <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3', '9u')">9u</button>
-      <button class="tijdslot-button busy" disabled>9.45u</button>
-      <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3', '10.30u')">10.30u</button>
-      <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3', '11.15u')">11.15u</button>
-    </div>
+    <div id="blokSecties">
+      <div id="blok3" class="blok">
+        <h2>BLOK 3 - Datum: 05/03/2025</h2>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3', '8.15u')">8.15u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3', '9u')">9u</button>
+        <button class="tijdslot-button busy" disabled>9.45u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3', '10.30u')">10.30u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3', '11.15u')">11.15u</button>
+      </div>
 
-    <div id="blokSectie" class="blok">
-      <h2>BLOK 3A - Datum: 12/03/2025</h2>
-      <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3A', '8.15u')">8.15u</button>
-      <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3A', '9u')">9u</button>
-      <button class="tijdslot-button busy" disabled>9.45u</button>
-      <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3A', '10.30u')">10.30u</button>
-      <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3A', '11.15u')">11.15u</button>
+      <div id="blok3a" class="blok">
+        <h2>BLOK 3A - Datum: 12/03/2025</h2>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3A', '8.15u')">8.15u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3A', '9u')">9u</button>
+        <button class="tijdslot-button busy" disabled>9.45u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3A', '10.30u')">10.30u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3A', '11.15u')">11.15u</button>
+      </div>
+
+      <div id="blok3b" class="blok">
+        <h2>BLOK 3B - Datum: 27/03/2025</h2>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3B', '8.30u')">8.30u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3B', '9.15u')">9.15u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3B', '10u')">10u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3B', '10.45u')">10.45u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3B', '11.30u')">11.30u</button>
+      </div>
+
+      <div id="blok3c" class="blok">
+        <h2>BLOK 3C - Datum: 01/04/2025</h2>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3C', '8.30u')">8.30u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3C', '9.15u')">9.15u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3C', '10u')">10u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3C', '10.45u')">10.45u</button>
+        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3C', '11.30u')">11.30u</button>
+      </div>
     </div>
 
     <!-- Formulier -->
@@ -184,15 +205,24 @@
 
       <button class="btn-verzenden" onclick="verzenden()">VERZENDEN</button>
     </div>
-
-    <!-- Succesbericht -->
-    <div id="succesSectie" style="display: none;">
-      <h2>Succes!</h2>
-      <p>Uw reservering is verzonden.</p>
-    </div>
   </div>
 
   <script>
+    const prijsCheckbox = document.getElementById("prijsCheckbox");
+    const blokSecties = document.getElementById("blokSecties");
+
+    prijsCheckbox.addEventListener("change", () => {
+      if (prijsCheckbox.checked) {
+        blokSecties.querySelectorAll(".blok").forEach((blok) => {
+          blok.style.display = "block";
+        });
+      } else {
+        blokSecties.querySelectorAll(".blok").forEach((blok) => {
+          blok.style.display = "none";
+        });
+      }
+    });
+
     function selectTijdslot(blok, tijdslot) {
       document.getElementById("formulierSectie").style.display = "block";
       document.getElementById("keuzeDetails").innerText = `Blok: ${blok}, Tijdslot: ${tijdslot}`;
@@ -201,7 +231,6 @@
     function verzenden() {
       alert("Uw gegevens zijn verzonden!");
       document.getElementById("formulierSectie").style.display = "none";
-      document.getElementById("succesSectie").style.display = "block";
     }
   </script>
 </body>
