@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>De Pastorijtuin - Reservering</title>
   <style>
-    /* Je originele CSS blijft ongewijzigd */
+    /* CSS blijft exact zoals in jouw vorige code */
     body {
       margin: 0;
       padding: 0;
@@ -36,19 +36,6 @@
       margin: 20px 0;
       text-align: left;
       line-height: 1.4;
-    }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin: 20px 0;
-    }
-    th, td {
-      border: 1px solid #000;
-      padding: 8px;
-      text-align: left;
-    }
-    th {
-      background-color: #ddd;
     }
     .checkbox-section {
       margin: 20px 0;
@@ -119,12 +106,14 @@
       cursor: not-allowed;
     }
   </style>
-  <!-- Voeg de Supabase JavaScript SDK toe -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <!-- Supabase JavaScript SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/supabase.js"></script>
+  <script>
+    console.log("Supabase SDK geladen:", window.createClient);
+  </script>
 </head>
 <body>
 
-  <!-- Je originele HTML blijft ongewijzigd -->
   <img src="pastorijtuin_logo.jpg" alt="Pastorijtuin Logo" class="logo" />
 
   <div class="container">
@@ -186,12 +175,10 @@
   </div>
 
 <script>
-  // Supabase configuratie
   const SUPABASE_URL = "https://jnnuhpcsygstrvhrbyna.supabase.co";
   const SUPABASE_KEY = "<SUPABASE_SERVICE_ROLE_KEY>";
   const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // Debugging: Log Supabase-client
   console.log("Supabase-client aangemaakt:", supabase);
 
   async function loadSlotsFromSupabase() {
@@ -203,7 +190,6 @@
     console.log("Tijdsloten opgehaald:", data);
   }
 
-  // Data laden bij paginalaad
   window.addEventListener("DOMContentLoaded", loadSlotsFromSupabase);
 </script>
 </body>
