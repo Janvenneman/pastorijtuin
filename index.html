@@ -51,41 +51,23 @@
     }
     .blok {
       margin-bottom: 30px;
-      display: none; /* Verborgen totdat checkbox wordt aangevinkt */
     }
-    .tijdslot-button {
-      margin: 5px;
-      padding: 8px 12px;
-      font-size: 1em;
-      cursor: pointer;
-      color: #fff;
+    iframe {
+      border: none;
+      width: 100%;
+      height: 700px;
     }
-    .tijdslot-button.free {
-      background-color: green;
-    }
-    .tijdslot-button.busy {
-      background-color: red;
-    }
-    .formulier-label {
-      display: block;
-      margin: 10px 0 5px;
-      font-weight: bold;
-      text-align: left;
-    }
-    .formulier-input {
-      width: 80%;
-      max-width: 400px;
-      padding: 8px;
-      margin-bottom: 10px;
-    }
-    .btn-verzenden {
-      background-color: #000;
-      color: #fff;
+    button {
       padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
       border: none;
       cursor: pointer;
-      font-size: 1em;
-      margin-top: 10px;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
@@ -142,96 +124,22 @@
       </tbody>
     </table>
 
-    <!-- Checkbox -->
-    <div>
-      <label>
-        <input type="checkbox" id="prijsCheckbox" />
-        Ik heb de bovenstaande prijsstelling gelezen en begrepen.
-      </label>
+    <div class="hoofdstuk">
+      <p>
+        Selecteer een blok en tijdslot en vul het formulier in om uw reservering door te sturen.
+      </p>
     </div>
 
-    <!-- Blokken en tijdsloten -->
-    <div id="blokSecties">
-      <div id="blok3" class="blok">
-        <h2>BLOK 3 - Datum: 05/03/2025</h2>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3', '8.15u')">8.15u</button>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3', '9u')">9u</button>
-        <button class="tijdslot-button busy" disabled>9.45u</button>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3', '10.30u')">10.30u</button>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3', '11.15u')">11.15u</button>
-      </div>
+    <!-- Google Formulier (iframe) -->
+    <iframe 
+      src="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true" 
+      frameborder="0">
+      Laden…
+    </iframe>
 
-      <div id="blok3a" class="blok">
-        <h2>BLOK 3A - Datum: 12/03/2025</h2>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3A', '8.15u')">8.15u</button>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3A', '9u')">9u</button>
-        <button class="tijdslot-button busy" disabled>9.45u</button>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3A', '10.30u')">10.30u</button>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3A', '11.15u')">11.15u</button>
-      </div>
-
-      <div id="blok3b" class="blok">
-        <h2>BLOK 3B - Datum: 27/03/2025</h2>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3B', '8.30u')">8.30u</button>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3B', '9.15u')">9.15u</button>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3B', '10u')">10u</button>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3B', '10.45u')">10.45u</button>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3B', '11.30u')">11.30u</button>
-      </div>
-
-      <div id="blok3c" class="blok">
-        <h2>BLOK 3C - Datum: 01/04/2025</h2>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3C', '8.30u')">8.30u</button>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3C', '9.15u')">9.15u</button>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3C', '10u')">10u</button>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3C', '10.45u')">10.45u</button>
-        <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3C', '11.30u')">11.30u</button>
-      </div>
-    </div>
-
-    <!-- Formulier -->
-    <div id="formulierSectie" style="display: none;">
-      <h3>Uw keuze:</h3>
-      <p id="keuzeDetails"></p>
-
-      <label class="formulier-label" for="naamInput">Naam:</label>
-      <input type="text" id="naamInput" class="formulier-input" placeholder="Uw naam" />
-
-      <label class="formulier-label" for="adresInput">Adres appartement:</label>
-      <input type="text" id="adresInput" class="formulier-input" placeholder="Uw adres" />
-
-      <label class="formulier-label" for="contactInput">GSM of e-mailadres:</label>
-      <input type="text" id="contactInput" class="formulier-input" placeholder="Uw contactgegevens" />
-
-      <button class="btn-verzenden" onclick="verzenden()">VERZENDEN</button>
-    </div>
+    <p>
+      <strong>Let op:</strong> Uw gegevens worden opgeslagen via Google Forms en wij sturen u een bevestiging.
+    </p>
   </div>
-
-  <script>
-    const prijsCheckbox = document.getElementById("prijsCheckbox");
-    const blokSecties = document.getElementById("blokSecties");
-
-    prijsCheckbox.addEventListener("change", () => {
-      if (prijsCheckbox.checked) {
-        blokSecties.querySelectorAll(".blok").forEach((blok) => {
-          blok.style.display = "block";
-        });
-      } else {
-        blokSecties.querySelectorAll(".blok").forEach((blok) => {
-          blok.style.display = "none";
-        });
-      }
-    });
-
-    function selectTijdslot(blok, tijdslot) {
-      document.getElementById("formulierSectie").style.display = "block";
-      document.getElementById("keuzeDetails").innerText = `Blok: ${blok}, Tijdslot: ${tijdslot}`;
-    }
-
-    function verzenden() {
-      alert("Uw gegevens zijn verzonden!");
-      document.getElementById("formulierSectie").style.display = "none";
-    }
-  </script>
 </body>
 </html>
