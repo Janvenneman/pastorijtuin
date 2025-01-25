@@ -108,9 +108,6 @@
   </style>
   <!-- Supabase JavaScript SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0"></script>
-  <script>
-    console.log("Supabase SDK geladen:", window.supabase);
-  </script>
 </head>
 <body>
 
@@ -175,22 +172,25 @@
   </div>
 
 <script>
-  const SUPABASE_URL = "https://jnnuhpcsygstrvhrbyna.supabase.co";
-  const SUPABASE_KEY = "<SUPABASE_SERVICE_ROLE_KEY>";
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  // Zorg ervoor dat Supabase correct wordt geïnitialiseerd
+  document.addEventListener("DOMContentLoaded", () => {
+    const SUPABASE_URL = "https://jnnuhpcsygstrvhrbyna.supabase.co";
+    const SUPABASE_KEY = "<SUPABASE_SERVICE_ROLE_KEY>";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  console.log("Supabase-client aangemaakt:", supabase);
+    console.log("Supabase-client aangemaakt:", supabase);
 
-  async function loadSlotsFromSupabase() {
-    const { data, error } = await supabase.from("time_slots").select("*");
-    if (error) {
-      console.error("Fout bij Supabase:", error.message);
-      return;
+    async function loadSlotsFromSupabase() {
+      const { data, error } = await supabase.from("time_slots").select("*");
+      if (error) {
+        console.error("Fout bij Supabase:", error.message);
+        return;
+      }
+      console.log("Tijdsloten opgehaald:", data);
     }
-    console.log("Tijdsloten opgehaald:", data);
-  }
 
-  window.addEventListener("DOMContentLoaded", loadSlotsFromSupabase);
+    loadSlotsFromSupabase();
+  });
 </script>
 </body>
 </html>
