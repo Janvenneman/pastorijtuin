@@ -107,9 +107,9 @@
     }
   </style>
   <!-- Supabase JavaScript SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/supabase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0"></script>
   <script>
-    console.log("Supabase SDK geladen:", window.createClient);
+    console.log("Supabase SDK geladen:", window.supabase);
   </script>
 </head>
 <body>
@@ -177,7 +177,7 @@
 <script>
   const SUPABASE_URL = "https://jnnuhpcsygstrvhrbyna.supabase.co";
   const SUPABASE_KEY = "<SUPABASE_SERVICE_ROLE_KEY>";
-  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   console.log("Supabase-client aangemaakt:", supabase);
 
