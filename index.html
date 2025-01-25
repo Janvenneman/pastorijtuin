@@ -23,12 +23,13 @@
       width: 100%;
       height: auto;
     }
-    .infotekst {
+    .infotekst, .extra-tekst {
       font-family: Georgia, serif;
       font-weight: bold;
       color: #555;
       font-size: 1.1em;
       margin-bottom: 20px;
+      text-align: center;
     }
     table {
       border-collapse: collapse;
@@ -99,10 +100,17 @@
   <img src="pastorijtuin_logo.jpg" alt="Pastorijtuin Logo" class="logo" />
 
   <div class="container">
-    <p class="infotekst" id="infoTekst">
+    <p class="infotekst">
       Welkom op de website van de Pastorijtuin. Deze website wordt enkel gebruikt
       door de bewoners en eigenaars van onze appartementen voor bepaalde toepassingen.
       U hoeft niet regelmatig te kijken, enkel bij een melding of actie die u doorkrijgt.
+    </p>
+
+    <p class="extra-tekst" id="extraTekst">
+      De RME tracht sinds enkele jaren een interessante groepsaankoop voor
+      het onderhoud verwarmingsinstallatie en afleveren reinigings- & verbrandingsattest.
+      Dit jaar hebben we dit opnieuw kunnen bekomen bij <strong>Bracq Alain</strong>,
+      na vergelijkingen op de markt.
     </p>
 
     <!-- Matrix -->
@@ -151,6 +159,26 @@
 
     <!-- Blokken -->
     <div id="blokSectie" class="blok-container hidden">
+      <div class="matrix">
+        <table>
+          <thead>
+            <tr>
+              <th>Deelnemers</th>
+              <th>Prijs (excl. BTW)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>10</td>
+              <td>€137</td>
+            </tr>
+            <tr>
+              <td>15</td>
+              <td>€127</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <div class="blok-buttons">
         <button onclick="selectBlok('BLOK 3', '05/03/2025')">BLOK 3</button>
         <button onclick="selectBlok('BLOK 3A', '12/03/2025')">BLOK 3A</button>
@@ -189,7 +217,7 @@
     const tijdslotSectie = document.getElementById("tijdslotSectie");
     const formulierSectie = document.getElementById("formulierSectie");
     const matrixSectie = document.getElementById("matrixSectie");
-    const infoTekst = document.getElementById("infoTekst");
+    const extraTekst = document.getElementById("extraTekst");
     const gekozenBlok = document.getElementById("gekozenBlok");
     const blokDatum = document.getElementById("blokDatum");
     const googleForm = document.getElementById("googleForm");
@@ -201,6 +229,7 @@
       if (prijsCheckbox.checked) {
         blokSectie.classList.remove("hidden");
         matrixSectie.classList.add("hidden");
+        extraTekst.classList.add("hidden");
       }
     });
 
