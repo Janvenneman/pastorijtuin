@@ -49,31 +49,8 @@
     th {
       background-color: #ddd;
     }
-    .checkbox-section {
-      margin: 20px 0;
-    }
-    .blok-buttons {
-      margin: 20px 0;
-    }
-    .blok-buttons button {
-      margin: 5px;
-      padding: 10px 20px;
-      font-size: 1em;
-      cursor: pointer;
-    }
-    .blok-buttons button:disabled {
-      background-color: #999;
-      cursor: not-allowed;
-    }
-    .tijdslot-sectie,
-    .formulier-sectie,
-    .final-message {
-      margin: 20px 0;
-      padding: 15px;
-      border: 1px solid #666;
-      background-color: #eee;
-      display: none;
-      text-align: center;
+    .blok {
+      margin-bottom: 30px;
     }
     .tijdslot-button {
       margin: 5px;
@@ -87,10 +64,6 @@
     }
     .tijdslot-button.busy {
       background-color: red;
-    }
-    #geenKeuzeBtn {
-      background-color: orange;
-      color: #fff;
     }
     .formulier-label {
       display: block;
@@ -113,10 +86,6 @@
       font-size: 1em;
       margin-top: 10px;
     }
-    .btn-verzenden:disabled {
-      background-color: #999;
-      cursor: not-allowed;
-    }
   </style>
 </head>
 <body>
@@ -136,10 +105,6 @@
         voor het onderhoud verwarmingsinstallatie en afleveren reinigings-& verbrandingsattest.
         Dit jaar hebben we dit <em>opnieuw</em> kunnen bekomen bij
         <strong>Bracq Alain</strong>, na vergelijkingen op de markt.
-      </p>
-      <p>
-        Gelieve onderstaand uw blok en tijdslot te selecteren. Indien 
-        er een slot niet meer beschikbaar is, zal u een melding krijgen.
       </p>
     </div>
 
@@ -176,107 +141,68 @@
       </tbody>
     </table>
 
-    <div class="checkbox-section">
+    <!-- Checkbox -->
+    <div>
       <label>
         <input type="checkbox" id="prijsCheckbox" />
         Ik heb de bovenstaande prijsstelling gelezen en begrepen.
       </label>
     </div>
 
-    <div class="blok-buttons">
-      <button id="blok3Btn" disabled>BLOK 3</button>
-      <button id="blok3aBtn" disabled>BLOK 3A</button>
-      <button id="blok3bBtn" disabled>BLOK 3B</button>
-      <button id="blok3cBtn" disabled>BLOK 3C</button>
+    <!-- Blokken en tijdsloten -->
+    <div id="blokSectie" class="blok">
+      <h2>BLOK 3 - Datum: 05/03/2025</h2>
+      <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3', '8.15u')">8.15u</button>
+      <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3', '9u')">9u</button>
+      <button class="tijdslot-button busy" disabled>9.45u</button>
+      <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3', '10.30u')">10.30u</button>
+      <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3', '11.15u')">11.15u</button>
     </div>
 
-    <div id="tijdslotSectie" class="tijdslot-sectie">
-      <h3 id="datumTitel"></h3>
-      <div id="tijdslotButtonsContainer"></div>
-      <br>
-      <button class="tijdslot-button" id="geenKeuzeBtn">
-        de datum of uur-keuze passen mij niet
-      </button>
+    <div id="blokSectie" class="blok">
+      <h2>BLOK 3A - Datum: 12/03/2025</h2>
+      <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3A', '8.15u')">8.15u</button>
+      <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3A', '9u')">9u</button>
+      <button class="tijdslot-button busy" disabled>9.45u</button>
+      <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3A', '10.30u')">10.30u</button>
+      <button class="tijdslot-button free" onclick="selectTijdslot('BLOK 3A', '11.15u')">11.15u</button>
     </div>
 
-    <div id="formulierSectie" class="formulier-sectie">
+    <!-- Formulier -->
+    <div id="formulierSectie" style="display: none;">
+      <h3>Uw keuze:</h3>
+      <p id="keuzeDetails"></p>
+
       <label class="formulier-label" for="naamInput">Naam:</label>
-      <input type="text" id="naamInput" class="formulier-input" placeholder="Vul je naam in..." required />
-      <label class="formulier-label" for="adresInput">Adres appartement (verder aanvullen):</label>
-      <input type="text" id="adresInput" class="formulier-input" placeholder="Blok X, verdiep, nr..." required />
-      <label class="formulier-label" for="contactInput">GSM nr of e-mailadres:</label>
-      <input type="text" id="contactInput" class="formulier-input" placeholder="GSM of e-mail..." required />
-      <label class="formulier-label" for="opmerkingenInput">Opmerkingen (optioneel):</label>
-      <textarea id="opmerkingenInput" class="formulier-input" placeholder="Max 100 karakters" maxlength="100"></textarea>
-      <button id="verzendBtn" class="btn-verzenden">VERZENDEN</button>
+      <input type="text" id="naamInput" class="formulier-input" placeholder="Uw naam" />
+
+      <label class="formulier-label" for="adresInput">Adres appartement:</label>
+      <input type="text" id="adresInput" class="formulier-input" placeholder="Uw adres" />
+
+      <label class="formulier-label" for="contactInput">GSM of e-mailadres:</label>
+      <input type="text" id="contactInput" class="formulier-input" placeholder="Uw contactgegevens" />
+
+      <button class="btn-verzenden" onclick="verzenden()">VERZENDEN</button>
     </div>
 
-    <div id="finalMessage" class="final-message">
-      <h2>GELUKT!</h2>
-      <p>U koos voor <strong>BLOK 3</strong> op <strong>05/03/2025</strong> om <strong>8.15u</strong>.</p>
-      <p>Wij bevestigen via de Whatsapp-groep zo snel mogelijk het aantal deelnemers en de corresponderende prijs.</p>
+    <!-- Succesbericht -->
+    <div id="succesSectie" style="display: none;">
+      <h2>Succes!</h2>
+      <p>Uw reservering is verzonden.</p>
     </div>
   </div>
 
   <script>
-    const prijsCheckbox = document.getElementById("prijsCheckbox");
-    const blokButtons = document.querySelectorAll(".blok-buttons button");
-    const tijdslotSectie = document.getElementById("tijdslotSectie");
-    const tijdslotButtonsContainer = document.getElementById("tijdslotButtonsContainer");
-    const formulierSectie = document.getElementById("formulierSectie");
-    const finalMessage = document.getElementById("finalMessage");
+    function selectTijdslot(blok, tijdslot) {
+      document.getElementById("formulierSectie").style.display = "block";
+      document.getElementById("keuzeDetails").innerText = `Blok: ${blok}, Tijdslot: ${tijdslot}`;
+    }
 
-    const blokData = {
-      "BLOK 3": {
-        date: "05/03/2025",
-        timeslots: ["8.15u", "9u", "9.45u", "10.30u", "11.15u"],
-        selected: [false, false, true, false, false]
-      },
-      "BLOK 3A": {
-        date: "12/03/2025",
-        timeslots: ["8.15u", "9u", "9.45u", "10.30u", "11.15u"],
-        selected: [false, true, false, false, false]
-      }
-    };
-
-    prijsCheckbox.addEventListener("change", () => {
-      blokButtons.forEach(button => button.disabled = !prijsCheckbox.checked);
-    });
-
-    blokButtons.forEach(button => {
-      button.addEventListener("click", () => {
-        const blok = button.textContent;
-        const blokInfo = blokData[blok];
-
-        tijdslotSectie.style.display = "block";
-        formulierSectie.style.display = "none";
-        finalMessage.style.display = "none";
-
-        document.getElementById("datumTitel").textContent = `Datum voor ${blok}: ${blokInfo.date}`;
-        tijdslotButtonsContainer.innerHTML = "";
-
-        blokInfo.timeslots.forEach((slot, index) => {
-          const btn = document.createElement("button");
-          btn.textContent = slot;
-          btn.className = blokInfo.selected[index] ? "tijdslot-button busy" : "tijdslot-button free";
-          btn.disabled = blokInfo.selected[index];
-
-          if (!blokInfo.selected[index]) {
-            btn.addEventListener("click", () => {
-              tijdslotSectie.style.display = "none";
-              formulierSectie.style.display = "block";
-            });
-          }
-
-          tijdslotButtonsContainer.appendChild(btn);
-        });
-      });
-    });
-
-    document.getElementById("verzendBtn").addEventListener("click", () => {
-      formulierSectie.style.display = "none";
-      finalMessage.style.display = "block";
-    });
+    function verzenden() {
+      alert("Uw gegevens zijn verzonden!");
+      document.getElementById("formulierSectie").style.display = "none";
+      document.getElementById("succesSectie").style.display = "block";
+    }
   </script>
 </body>
 </html>
