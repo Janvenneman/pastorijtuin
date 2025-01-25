@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>De Pastorijtuin - Reservering</title>
   <style>
-    /* CSS blijft exact zoals in jouw vorige code */
     body {
       margin: 0;
       padding: 0;
@@ -171,26 +170,29 @@
     <div id="finalMessage" class="final-message"></div>
   </div>
 
-<script>
-  // Zorg ervoor dat Supabase correct wordt geïnitialiseerd
-  document.addEventListener("DOMContentLoaded", () => {
-    const SUPABASE_URL = "https://jnnuhpcsygstrvhrbyna.supabase.co";
-    const SUPABASE_KEY = "<SUPABASE_SERVICE_ROLE_KEY>";
-    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+  <!-- JavaScript: Supabase initialisatie en logica -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Supabase-configuratie
+      const SUPABASE_URL = "https://jnnuhpcsygstrvhrbyna.supabase.co";
+      const SUPABASE_KEY = "<SUPABASE_SERVICE_ROLE_KEY>";
+      const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    console.log("Supabase-client aangemaakt:", supabase);
+      console.log("Supabase-client aangemaakt:", supabase);
 
-    async function loadSlotsFromSupabase() {
-      const { data, error } = await supabase.from("time_slots").select("*");
-      if (error) {
-        console.error("Fout bij Supabase:", error.message);
-        return;
+      // Tijdsloten ophalen uit Supabase
+      async function loadSlotsFromSupabase() {
+        const { data, error } = await supabase.from("time_slots").select("*");
+        if (error) {
+          console.error("Fout bij Supabase:", error.message);
+          return;
+        }
+        console.log("Tijdsloten opgehaald:", data);
       }
-      console.log("Tijdsloten opgehaald:", data);
-    }
 
-    loadSlotsFromSupabase();
-  });
-</script>
+      // Data ophalen bij pagina-lading
+      loadSlotsFromSupabase();
+    });
+  </script>
 </body>
 </html>
