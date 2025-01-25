@@ -105,8 +105,6 @@
       cursor: not-allowed;
     }
   </style>
-  <!-- Supabase JavaScript SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.1.1"></script>
 </head>
 <body>
 
@@ -147,8 +145,14 @@
     </div>
 
     <div id="tijdslotSectie" class="tijdslot-sectie">
-      <h3 id="datumTitel"></h3>
-      <div id="tijdslotButtonsContainer"></div>
+      <h3 id="datumTitel">Datum voor BLOK 3: 05/03/2025</h3>
+      <div id="tijdslotButtonsContainer">
+        <button class="tijdslot-button free">8.15u</button>
+        <button class="tijdslot-button free">9u</button>
+        <button class="tijdslot-button busy" disabled>9.45u</button>
+        <button class="tijdslot-button free">10.30u</button>
+        <button class="tijdslot-button free">11.15u</button>
+      </div>
       <br>
       <button class="tijdslot-button" id="geenKeuzeBtn">
         de datum of uur-keuze passen mij niet
@@ -164,34 +168,33 @@
       <input type="text" id="contactInput" class="formulier-input" placeholder="GSM of e-mail..." required />
       <label class="formulier-label" for="opmerkingenInput">Opmerkingen (optioneel):</label>
       <textarea id="opmerkingenInput" class="formulier-input" placeholder="Max 100 karakters" maxlength="100"></textarea>
-      <button id="verzendBtn" class="btn-verzenden" disabled>VERZENDEN</button>
+      <button id="verzendBtn" class="btn-verzenden">VERZENDEN</button>
     </div>
 
-    <div id="finalMessage" class="final-message"></div>
+    <div id="finalMessage" class="final-message">
+      <h2>GELUKT!</h2>
+      <p>U koos voor <strong>BLOK 3</strong> op <strong>05/03/2025</strong> om <strong>8.15u</strong>.</p>
+      <p>Wij bevestigen via de Whatsapp-groep zo snel mogelijk het aantal deelnemers en de corresponderende prijs.</p>
+    </div>
   </div>
 
-  <!-- JavaScript: Supabase Initialisatie -->
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // Supabase configuratie
-      const SUPABASE_URL = "https://jnnuhpcsygstrvhrbyna.supabase.co";
-      const SUPABASE_KEY = "<SUPABASE_SERVICE_ROLE_KEY>";
-      const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    // Voor de platte website maken we alles handmatig zichtbaar
+    document.getElementById("prijsCheckbox").addEventListener("change", function () {
+      const isChecked = this.checked;
+      document.getElementById("blok3Btn").disabled = !isChecked;
+      document.getElementById("blok3aBtn").disabled = !isChecked;
+      document.getElementById("blok3bBtn").disabled = !isChecked;
+      document.getElementById("blok3cBtn").disabled = !isChecked;
 
-      console.log("Supabase-client aangemaakt:", supabase);
-
-      // Tijdsloten ophalen uit Supabase
-      async function loadSlotsFromSupabase() {
-        const { data, error } = await supabase.from("time_slots").select("*");
-        if (error) {
-          console.error("Fout bij Supabase:", error.message);
-          return;
-        }
-        console.log("Tijdsloten opgehaald:", data);
+      if (isChecked) {
+        document.getElementById("tijdslotSectie").style.display = "block";
       }
+    });
 
-      // Data ophalen bij pagina-lading
-      loadSlotsFromSupabase();
+    document.getElementById("verzendBtn").addEventListener("click", function () {
+      document.getElementById("formulierSectie").style.display = "none";
+      document.getElementById("finalMessage").style.display = "block";
     });
   </script>
 </body>
