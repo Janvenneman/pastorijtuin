@@ -30,6 +30,12 @@
       font-size: 1.1em;
       margin-bottom: 20px;
     }
+    .hoofdstuk {
+      color: #000;
+      margin: 20px 0;
+      text-align: left;
+      line-height: 1.4;
+    }
     table {
       border-collapse: collapse;
       width: 100%;
@@ -43,11 +49,38 @@
     th {
       background-color: #ddd;
     }
+    .blok-buttons button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .blok-buttons button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .tijdslot-button {
+      margin: 5px;
+      padding: 8px 12px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    .tijdslot-button.free {
+      background-color: green;
+      color: #fff;
+    }
+    .tijdslot-button.selected {
+      background-color: blue;
+      color: #fff;
+    }
     iframe {
       border: none;
       width: 100%;
       height: 700px;
       margin: 20px 0;
+    }
+    .hidden {
+      display: none;
     }
   </style>
 </head>
@@ -62,21 +95,83 @@
       U hoeft niet regelmatig te kijken, enkel bij een melding of actie die u doorkrijgt.
     </p>
 
+    <div class="hoofdstuk">
+      <p>
+        <strong>De RME tracht sinds enkele jaren een interessante groepsaankoop</strong> 
+        voor het onderhoud verwarmingsinstallatie en afleveren reinigings-& verbrandingsattest.
+        Dit jaar hebben we dit <em>opnieuw</em> kunnen bekomen bij
+        <strong>Bracq Alain</strong>, na vergelijkingen op de markt.
+      </p>
+    </div>
+
+    <!-- Checkbox -->
     <div>
-      <h2>Reservering</h2>
-      <p>Selecteer een blok en tijdslot en vul het formulier in om uw reservering door te sturen.</p>
+      <label>
+        <input type="checkbox" id="prijsCheckbox" />
+        Ik heb de bovenstaande prijsstelling gelezen en begrepen.
+      </label>
+    </div>
+
+    <!-- Blokken -->
+    <div id="blokSectie" class="blok-buttons hidden">
+      <button onclick="selectBlok('BLOK 3', '05/03/2025')">BLOK 3</button>
+      <button onclick="selectBlok('BLOK 3A', '12/03/2025')">BLOK 3A</button>
+      <button onclick="selectBlok('BLOK 3B', '27/03/2025')">BLOK 3B</button>
+      <button onclick="selectBlok('BLOK 3C', '01/04/2025')">BLOK 3C</button>
+    </div>
+
+    <!-- Tijdsloten -->
+    <div id="tijdslotSectie" class="hidden">
+      <h3 id="blokDatum"></h3>
+      <button class="tijdslot-button free" onclick="selectTijdslot('8.15u')">8.15u</button>
+      <button class="tijdslot-button free" onclick="selectTijdslot('9u')">9u</button>
+      <button class="tijdslot-button free" onclick="selectTijdslot('9.45u')">9.45u</button>
+      <button class="tijdslot-button free" onclick="selectTijdslot('10.30u')">10.30u</button>
+      <button class="tijdslot-button free" onclick="selectTijdslot('11.15u')">11.15u</button>
     </div>
 
     <!-- Google Formulier -->
-    <iframe 
-      src="https://docs.google.com/forms/d/e/1FAIpQLSd15CfhFY3MSSr_Hb8Ewx4pY5NfZUlSP5KrWytF3NDFnbAvbw/viewform?embedded=true" 
-      frameborder="0">
-      Laden…
-    </iframe>
-
-    <p>
-      <strong>Let op:</strong> Uw gegevens worden opgeslagen via Google Forms en wij sturen u een bevestiging.
-    </p>
+    <div id="formulierSectie" class="hidden">
+      <iframe 
+        src="https://docs.google.com/forms/d/e/1FAIpQLSd15CfhFY3MSSr_Hb8Ewx4pY5NfZUlSP5KrWytF3NDFnbAvbw/viewform?embedded=true" 
+        frameborder="0">
+        Laden…
+      </iframe>
+    </div>
   </div>
+
+  <script>
+    const prijsCheckbox = document.getElementById("prijsCheckbox");
+    const blokSectie = document.getElementById("blokSectie");
+    const tijdslotSectie = document.getElementById("tijdslotSectie");
+    const formulierSectie = document.getElementById("formulierSectie");
+    const blokDatum = document.getElementById("blokDatum");
+
+    let gekozenBlok = '';
+    let gekozenTijdslot = '';
+
+    prijsCheckbox.addEventListener("change", () => {
+      if (prijsCheckbox.checked) {
+        blokSectie.classList.remove("hidden");
+      } else {
+        blokSectie.classList.add("hidden");
+        tijdslotSectie.classList.add("hidden");
+        formulierSectie.classList.add("hidden");
+      }
+    });
+
+    function selectBlok(blok, datum) {
+      gekozenBlok = blok;
+      blokDatum.textContent = `${blok} - Datum: ${datum}`;
+      tijdslotSectie.classList.remove("hidden");
+      formulierSectie.classList.add("hidden");
+    }
+
+    function selectTijdslot(tijdslot) {
+      gekozenTijdslot = tijdslot;
+      alert(`U koos: ${gekozenBlok}, Tijdslot: ${gekozenTijdslot}`);
+      formulierSectie.classList.remove("hidden");
+    }
+  </script>
 </body>
 </html>
