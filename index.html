@@ -23,13 +23,18 @@
       width: 100%;
       height: auto;
     }
-    .infotekst, .extra-tekst {
+    .infotekst {
       font-family: Georgia, serif;
       font-weight: bold;
       color: #555;
       font-size: 1.1em;
       margin-bottom: 20px;
+    }
+    .extra-tekst {
+      font-size: 1.1em;
       text-align: center;
+      color: #333;
+      margin-bottom: 20px;
     }
     table {
       border-collapse: collapse;
@@ -49,10 +54,6 @@
       justify-content: space-between;
       align-items: flex-start;
       margin-top: 20px;
-    }
-    .matrix {
-      flex: 1;
-      text-align: left;
     }
     .blok-buttons {
       flex: 1;
@@ -97,15 +98,18 @@
 </head>
 <body>
 
+  <!-- Logo -->
   <img src="pastorijtuin_logo.jpg" alt="Pastorijtuin Logo" class="logo" />
 
   <div class="container">
+    <!-- Welkomsttekst -->
     <p class="infotekst">
       Welkom op de website van de Pastorijtuin. Deze website wordt enkel gebruikt
       door de bewoners en eigenaars van onze appartementen voor bepaalde toepassingen.
       U hoeft niet regelmatig te kijken, enkel bij een melding of actie die u doorkrijgt.
     </p>
 
+    <!-- RME Tekst -->
     <p class="extra-tekst" id="extraTekst">
       De RME tracht sinds enkele jaren een interessante groepsaankoop voor
       het onderhoud verwarmingsinstallatie en afleveren reinigings- & verbrandingsattest.
@@ -159,26 +163,6 @@
 
     <!-- Blokken -->
     <div id="blokSectie" class="blok-container hidden">
-      <div class="matrix">
-        <table>
-          <thead>
-            <tr>
-              <th>Deelnemers</th>
-              <th>Prijs (excl. BTW)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>10</td>
-              <td>€137</td>
-            </tr>
-            <tr>
-              <td>15</td>
-              <td>€127</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
       <div class="blok-buttons">
         <button onclick="selectBlok('BLOK 3', '05/03/2025')">BLOK 3</button>
         <button onclick="selectBlok('BLOK 3A', '12/03/2025')">BLOK 3A</button>
