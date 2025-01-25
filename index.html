@@ -32,8 +32,8 @@
     }
     table {
       border-collapse: collapse;
-      width: 300px;
-      margin: 0 auto 20px auto;
+      width: 100%;
+      margin: 20px 0;
     }
     th, td {
       border: 1px solid #000;
@@ -51,14 +51,16 @@
     }
     .matrix {
       flex: 1;
-      margin-right: 20px;
+      text-align: left;
     }
     .blok-buttons {
-      flex: 2;
+      flex: 1;
       text-align: left;
     }
     .blok-buttons button {
-      margin: 5px;
+      display: block;
+      width: 80%;
+      margin: 10px auto;
       padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
@@ -69,6 +71,7 @@
     }
     .tijdslot-container {
       margin-top: 20px;
+      text-align: center;
     }
     .tijdslot-button {
       margin: 5px;
@@ -105,6 +108,43 @@
       U hoeft niet regelmatig te kijken, enkel bij een melding of actie die u doorkrijgt.
     </p>
 
+    <!-- Matrix -->
+    <div id="matrixSectie">
+      <h3>Prijzenmatrix</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Minimum aantal deelnemers</th>
+            <th>Prijs (excl. BTW)</th>
+            <th>Prijs (incl. BTW)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>10</td>
+            <td>€137</td>
+            <td>€165.77</td>
+          </tr>
+          <tr>
+            <td>15</td>
+            <td>€127</td>
+            <td>€153.67</td>
+          </tr>
+          <tr>
+            <td>20</td>
+            <td>€117</td>
+            <td>€141.57</td>
+          </tr>
+          <tr>
+            <td>25</td>
+            <td>€107</td>
+            <td>€129.47</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Checkbox -->
     <div>
       <label>
         <input type="checkbox" id="prijsCheckbox" />
@@ -112,38 +152,33 @@
       </label>
     </div>
 
-    <!-- Matrix en Blokken -->
+    <!-- Blokken -->
     <div id="blokSectie" class="blok-container hidden">
-      <div class="matrix">
+      <div class="matrix" id="matrixSmall">
         <h3>Prijzenmatrix</h3>
         <table>
           <thead>
             <tr>
               <th>Deelnemers</th>
               <th>Prijs (excl. BTW)</th>
-              <th>Prijs (incl. BTW)</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>10</td>
               <td>€137</td>
-              <td>€165.77</td>
             </tr>
             <tr>
               <td>15</td>
               <td>€127</td>
-              <td>€153.67</td>
             </tr>
             <tr>
               <td>20</td>
               <td>€117</td>
-              <td>€141.57</td>
             </tr>
             <tr>
               <td>25</td>
               <td>€107</td>
-              <td>€129.47</td>
             </tr>
           </tbody>
         </table>
@@ -194,10 +229,7 @@
     prijsCheckbox.addEventListener("change", () => {
       if (prijsCheckbox.checked) {
         blokSectie.classList.remove("hidden");
-      } else {
-        blokSectie.classList.add("hidden");
-        tijdslotSectie.classList.add("hidden");
-        formulierSectie.classList.add("hidden");
+        document.getElementById("matrixSectie").classList.add("hidden");
       }
     });
 
@@ -213,8 +245,8 @@
 
       // Pas het Google Formulier aan
       const queryParams = new URLSearchParams({
-        "entry.123456789": gekozenBlok, // Vervang door juiste veld-ID
-        "entry.987654321": `${gekozenTijdslot}`, // Vervang door juiste veld-ID
+        "entry.123456789": gekozenBlok,
+        "entry.987654321": gekozenTijdslot,
       });
 
       googleForm.src = `https://docs.google.com/forms/d/e/1FAIpQLSd15CfhFY3MSSr_Hb8Ewx4pY5NfZUlSP5KrWytF3NDFnbAvbw/viewform?embedded=true&${queryParams}`;
